@@ -1,0 +1,38 @@
+<!-- propiedades (SOLO LAS AFECTADAS POR ESTE MANTENIMIENTO);
+
+presupuestos 
+
+
+-->
+
+<!-- SUBMENU MANTENIMIENTO -->
+
+<div class="subMenu1" id="subMenuMantenimiento">
+
+    <div type="button" class="subMenuBox subMenuBox1" id="listaPropiedades">
+        <p>Propiedades</p>
+    </div>
+
+    <div type="button" class="subMenuBox" id="listaPresupuestos">
+        <p>Presupuestos</p>
+    </div>
+
+    <div class="subMenuBox subMenuBox2" id="">
+        <p>Historial</p>
+    </div>
+
+</div>
+
+
+<script>
+
+    $('#listaPropiedades').click(function () {
+        $('.main').load('LISTAS/listaPropiedades.html')
+    });
+
+    $('#listaPresupuestos').click(function () {
+        $('.main').load('LISTAS/listaPresupuestos.html')
+    });
+
+
+</script>

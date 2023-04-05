@@ -1,0 +1,131 @@
+<div id="containerRecibos">
+
+    <div class="headComunidadFicha" style="display: none">
+        <p>Datos recibo</p>
+    </div>
+
+    <form id="reciboForm">
+
+        <div class=" form-group dflex">
+
+            <div class="form-group1">
+                <label for="inputImporteRecibo">Importe*</label>
+                <input type="text" class="form-control activarInput requerido" id="IMPORTE" name="IMPORTE"
+                    concepto='importe' disabled="true">
+            </div>
+
+            <div class="form-group1" id="tercero_nombre">
+                <label for=""> Tercero*</label>
+                <select class="form-select w-100 activarInput requerido" id="TERCERO_NOMBRE" name="TERCERO_NOMBRE"
+                    concepto="tercero" disabled="true">
+                </select>
+            </div>
+
+            <div class="form-group1">
+                <label for="FECHA">Fecha*</label>
+                <input type="date" id="FECHA" name="FECHA" class="form-control activarInput requerido" concepto="fecha"
+                    disabled="true">
+            </div>
+
+        </div>
+
+        <div class=" form-group dflex">
+
+            <div class="form-group1">
+                <label for="inputDescripcion">Descripcion*</label>
+                <input type="textarea" class="form-control activarInput requerido" placeholder="Cuota mensual"
+                    id="DESCRIPCION" name="DESCRIPCION" concepto='descripción' disabled="true">
+            </div>
+
+            <div class="form-group1">
+                <label for="inputReferenciaRecibo">Referencia*</label>
+                <input type="text" id="REFERENCIA" name="REFERENCIA" class="form-control activarInput requerido"
+                    concepto="referencia" disabled="true">
+            </div>
+
+            <div class="form-group1" hidden>
+                <label for="inputCCC">Numero de cuenta*</label>
+                <input type="text" class="form-control activarInput" id="CCC" name="CCC" concepto='numero de cuenta'
+                    disabled="true">
+            </div>
+
+        </div>
+
+        <div class="dflex">
+            <div class="form-group1">
+                <input type="text" class="form-control" id="ID" name="ID" hidden>
+            </div>
+            <div class="form-group1">
+                <input type="text" class="form-control" id="COMUNIDAD_ID" name="COMUNIDAD_ID" hidden>
+            </div>
+        </div>
+
+
+        <br>
+        <div class="alert alert-danger " role="alert" id="divErrores" style="display: none">
+
+        </div>
+
+        <br>
+
+        <div class="campoRequerido">
+            *campo requerido
+        </div>
+    </form>
+
+    <div class="botonesDatosComunidad dflex" style="display: none">
+        <div class="botonesDatosComunidad ">
+            <button class="btn botonEditar" id="activar" onclick="editarFormulario()">EDITAR</button>
+
+            <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormComunidad"
+                onclick="modificaReciboComunidad()">GUARDAR</button>
+        </div>
+    </div>
+
+    <div class="guardarNuevaComunidad" style="display: none">
+        <button type="submit" class="btn btn-primary" id="guardarNuevaPropiedad"
+            onclick="addReciboComunidad()">GUARDAR</button>
+    </div>
+
+    <div class="botonesDatosComunidad dflex " id="botonesBanco" style="display: none">
+        <button type="submit" class="btn btn-danger" id="eliminarRecibo">ELIMINAR</button>
+        <button class="btn btn-danger mod" id="supRecibo" onclick="eliminarRecibo()" style="display: none"><strong>Si,
+                eliminar
+                recibo</strong></button>
+    </div>
+
+</div>
+
+
+<script>
+
+    // DISPLAY
+
+    tercerosSelect("#TERCERO_NOMBRE");
+    $("#guardarFormComunidad").hide();
+    $("#divErrores").hide();
+
+    //ACCIONES
+
+    // ELIMINAR RECIBO
+    $('#eliminarRecibo').click(function () {
+        $('#supRecibo').toggle();
+        $('#eliminarRecibo').hide();
+    });
+
+
+    function editarFormulario() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $("#guardarFormComunidad").toggle();
+    }
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        alert("envio");
+    });
+
+
+
+
+</script>

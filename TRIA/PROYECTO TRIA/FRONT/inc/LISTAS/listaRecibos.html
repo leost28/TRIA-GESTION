@@ -1,0 +1,136 @@
+<div class="containerComunidades mainPropiedades">
+    <div class="headListaComunidades">
+        <p>Recibos</p>
+    </div>
+
+    <div id="listadoRecibos"></div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary botonPosition" id="botonNuevoRecibo" data-toggle="modal"
+                data-target="#nuevoRecibo"><span class='fas fa-address-card'></span> Nuevo recibo</button>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport" id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    //TABULATOR
+
+    var table = new Tabulator("#listadoRecibos", {
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: {
+            listaRecibos: "ok"
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+        rowClick: function (e, row) {
+            var reciboElegido = row.getData();
+            reciboID = reciboElegido
+            console.log(reciboElegido);
+
+            $("#subMenu").load('SUBMENUS/menuFinanciera.html'),
+                $(".main").load("fichaRecibo.html", function () {
+                    $("#accion").val(reciboElegido);
+                    // propArray = listaPropiedades(reciboElegido);
+                    //Rellenar datos de Campos
+                    $("#ID").val(reciboElegido['ID']);
+                    $("#COMUNIDAD_ID").val(reciboElegido['COMUNIDAD_ID']);
+                    $("#IMPORTE").val(reciboElegido['IMPORTE']);
+                    $("#REFERENCIA").val(reciboElegido['REFERENCIA']);
+                    $("#DESCRIPCION").val(reciboElegido['DESCRIPCION']);
+                    $("#FECHA").val(reciboElegido['FECHA']);
+                });
+        },
+
+        columns: [
+            {
+                title: "Nº", field: "ID", width: "80", headerFilter: "input",
+            },
+
+            {
+                title: "COMUNIDAD", field: "COMUNIDAD_NOMBRE", headerFilter: "input",
+            },
+
+            {
+                title: "TERCERO", field: "TERCERO_NOMBRE", headerFilter: "input",
+            },
+
+            {
+                title: "IMPORTE", field: "IMPORTE", headerFilter: "input",
+            },
+
+            {
+                title: "REFERENCIA", field: "REFERENCIA", headerFilter: "input"
+            },
+
+            {
+                title: "DESCRIPCION", field: "DESCRIPCION", headerFilter: "input"
+            },
+
+            {
+                title: "FECHA", field: "FECHA", headerFilter: "input",
+                formatter: "datetime", formatterParams: {
+                    outputFormat: "DD/MM/YY",
+                    invalidPlaceholder: "(invalid date)",
+                }
+            },
+
+        ],
+    });
+
+
+    //ACCIONES
+
+    $("#botonNuevoRecibo").click(function () {
+        $("#tituloModal").html("<h5>NUEVO RECIBO</h5>");
+        $("#cuerpoModal").load("FICHAS/fichaRecibo.html", function () {
+        });
+
+        $("#modalDiv").show("fast");
+    });
+
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+
+</script>

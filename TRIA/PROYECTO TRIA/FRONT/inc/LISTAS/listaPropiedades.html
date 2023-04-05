@@ -1,0 +1,170 @@
+<div class="containerComunidades mainPropiedades" id="">
+
+    <div class="breadCrump">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de comunidades</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump"></span></li>
+                <li class="breadcrumb-item">Inmuebles</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="headListaComunidades">
+        <p>Lista de inmuebles</p>
+    </div>
+
+    <div id="listadoPropiedad" class=""></div>
+    <br>
+    <div class="row">
+        <div class="col ">
+            <button class="btn btn-primary botonPosition" id="botonNuevaPropiedad" data-toggle="modal"
+                data-target="#nuevaPropiedad"><span class='fas fa-address-card'></span> Nuevo inmueble</button>
+        </div>
+
+        <div class="col-1 dflex botonesPropiedades">
+            <button class="btn btn-danger botoneraExport " id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport  " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+
+    //TABULATOR
+
+    var table = new Tabulator("#listadoPropiedad", {
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: {
+            listaPropiedades: "ok",
+            comunidadID: comunidadID.ID
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+        rowClick: function (e, row) {
+            var propiedadElegida = row.getData();
+            propiedadID = propiedadElegida;
+            console.log("Propiedad: " + propiedadID);
+            //MODIFICAR PROPIEDAD (MODAL)
+            $("#subMenu").load('SUBMENUS/menuComunidades.html'),
+                $("#cuerpoModal").load("FICHAS/fichaPropiedad.html", function () {
+                    $('.headComunidadFicha').show();
+                    $('.botonesDatosComunidad ').show();
+                    $("#tituloModal").hide();
+                    $('#modalDiv').show();
+                    $("#accion").val(propiedadElegida['ACTIVO']);
+                    $("#TERCERO_NOMBRE option[value=" + propiedadElegida.TERCERO_ID + "]").attr('selected', 'selected');
+                    //Rellenar datos de Campos
+                    $("#IDpropiedad").val(propiedadElegida['ID']);
+                    $("#DIRECCION").val(propiedadElegida['DIRECCION']);
+                    $("#TIPOCUOTA").val(propiedadElegida['TIPOCUOTA']);
+                    $("#COEF").val(propiedadElegida['COEF']);
+                });
+        },
+
+        columns: [
+
+            {
+                title: "Nº", field: "ID", width: 50, headerFilter: "input",
+            },
+
+
+            {
+                title: "DIRECCION", field: "DIRECCION", headerFilter: "input"
+            },
+
+            {
+                title: "PROPIETARIO", field: "TERCERO_NOMBRE", headerFilter: "input"
+            },
+
+            {
+                title: "TIPO DE CUOTA", field: "TIPOCUOTA", headerFilter: "input"
+            },
+
+            {
+                title: "COEF", field: "COEF", headerFilter: "input",
+                formatter: function (cell) {
+                    var valor = cell.getValue();
+                    if (valor == "") {
+                        return "sin % de participación"
+                    } else{
+                        return valor;
+                    }
+                }
+            }
+
+
+        ],
+
+    });
+
+    //Cargar lista de comunidades
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaComunidades.html')
+        $('#subMenu').empty();
+    });
+
+    //BREADCRUMP
+
+    $('#inputBreadCrump').html(comunidadID.DESCRIPCION);
+
+    //LLAMAR AL MODAL NUEVA COMUNIDAD
+
+    $("#botonNuevaPropiedad").click(function () {
+        $("#tituloModal").show();
+        $("#tituloModal").html("<h5>NUEVO INMUEBLE</h5>");
+        $("#cuerpoModal").load("FICHAS/fichaPropiedad.html", function () {
+            $('.botonesNuevaPropiedad').show();
+            $('input').attr('disabled', false);
+            $('select').attr('disabled', false);
+        });
+        $("#modalDiv").show("fast");
+    });
+
+    //CREAR PDF
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+
+
+</script>

@@ -1,0 +1,138 @@
+<div class="containerComunidades" id="containerDocumentos">
+
+
+    <div class="headListaComunidades">
+        <p>Historial</p>
+    </div>
+
+    <div id="listadoLogManteninimiento" class=""></div>
+    <br>
+    <div class="row">
+        <div class="col guardarNuevaComunidad">
+            <button class="btn btn-primary" id="botonNuevoLogManteninimiento" data-toggle="modal"
+                data-target="#nuevoLogManteninimiento"><span class='fas fa-address-card'></span> Nuevo registro</button>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport " id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport  " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    //TABULATOR
+
+    var table = new Tabulator("#listadoLogManteninimiento", {
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: {
+            listaLogMantenimientoComunidad: "ok",
+            mantenimiento: mantenimientoID.ID,
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+
+        rowClick: function (e, row) {
+
+            var logElegido = row.getData();
+
+            logMatenimientoID = logElegido;
+            console.log(logElegido);
+
+            // $("#subMenu").load('menuComunidades.html'),
+            $("#cuerpoModal").load("FICHAS/fichaLogMantenimiento.html", function () {
+                $("#tituloModal").hide();
+                $('.headComunidadFicha').show();
+                $('.botonEditar').show();
+                $('#modalDiv').show();
+                // $("#accion").val(logElegido);
+                //Rellenar datos de Campos
+                $("#ID").val(logElegido['ID']);
+                $("#DESCRIPCION").val(logElegido['DESCRIPCION']);
+                $("#MANTENIMIENTO_ID").val(logElegido['MANTENIMIENTO_ID']);
+                $("#FECHA").val(logElegido['FECHA']);
+
+            });
+        },
+
+        columns: [
+            {
+                title: "Nº", field: "ID", width: 80, headerFilter: "input",
+            },
+
+            {
+                title: "DESCRIPCION", field: "DESCRIPCION", headerFilter: "input"
+            },
+
+            {
+                title: "FECHA", field: "FECHA", headerFilter: "input"
+            },
+
+        ],
+
+    });
+
+
+    //LLAMAR AL MODAL NUEVO DOCUMENTO
+
+    $("#botonNuevoDocumento").click(function () {
+        $("#tituloModal").show();
+        $('.headComunidadFicha').hide();
+        $("#tituloModal").html("<h5>NUEVO DOCUMENTO</h5>");
+
+        $("#cuerpoModal").load("FICHAS/fichaDocumento.html", function () {
+            $('.guardarNuevaComunidad').show();
+            $('input').attr('disabled', false);
+            $('select').attr('disabled', false);
+        });
+
+        $("#modalDiv").show("fast");
+
+    });
+
+    // Cargar lista comunidades
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaComunidades.html')
+        $('#subMenu').empty();
+    });
+
+    //CREAR PDF
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+
+</script>

@@ -1,0 +1,64 @@
+<div class="headComunidadFicha" style="display: none">
+    <p>Apunte histórico de mantenimiento</p>
+</div>
+
+<form id="añadirLogForm">
+
+    <div class=" form-group dflex">
+        <div class="form-group1">
+            <label for="">Descripción*</label>
+            <input type="text" class="form-control activarInput requeridoLog" id="DESCRIPCION" name="DESCRIPCION"
+                concepto='descripcion' disabled=" true">
+        </div>
+
+        <div class="form-group1">
+            <label for="FECHA">Fecha*</label>
+            <input type="date" id="FECHA" name="FECHA" class="form-control activarInput requeridoLog" desc="fecha"
+                disabled="true" concepto="fecha">
+        </div>
+
+    </div>
+
+    <div class="form-group1">
+        <input type="text" class="form-control" id="ID" name="ID" hidden>
+    </div>
+
+    <div class="form-group1">
+        <input type="text" class="form-control" id="MANTENIMIENTO_ID" name="MANTENIMIENTO_ID" hidden>
+    </div>
+
+</form>
+
+<div class="botonesDatosComunidad dflex">
+
+
+    <!-- <button type="submit" class="btn btn-primary" id="eliminarDocumento">ELIMINAR</button>
+        <button class="btn btn-danger mod" id="supDocumento" onclick="eliminarDocumento()"
+            style="display: none"><strong>Si,
+                eliminar
+                documento</strong></button> -->
+
+    <button class="btn botonEditar" id="activar" onclick="editarLog()" style="display: none">EDITAR</button>
+
+    <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormLog" style="display: none"
+        onclick="modificaLog()">GUARDAR</button>
+
+</div>
+
+<div class="guardarNuevaComunidad  dflex" style="display: none">
+
+    <button type="submit" class="btn btn-primary botonGuardar" id="guardarForm" onclick="addLog()">GUARDAR</button>
+
+</div>
+
+<script>
+
+    function editarLog() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $('.botonGuardar').show();
+    };
+
+
+
+</script>

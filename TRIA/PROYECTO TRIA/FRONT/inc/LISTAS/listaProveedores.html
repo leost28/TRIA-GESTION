@@ -1,0 +1,163 @@
+<div class="containerComunidades">
+    <div class="headListaComunidades">
+        <p>Lista de proveedores</p>
+    </div>
+
+    <div id="listadoProveedores"></div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary botonPosition" id="botonNuevoProveedor" data-toggle="modal">
+                <span class="fas fa-address-card"></span> Nuevo proveedor
+            </button>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport" id="creaPdf">
+                <span class="fas fa-print"></span>
+            </button>
+            <button class="btn btn-success botoneraExport" id="creaExcel">
+                <span class="fas fa-file-excel"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    //DESGLOSE PARTES ----------------------------------------------------
+    var table = new Tabulator("#listadoProveedores", {
+        persistence: true,
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php", //ajax URL
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST", //ajax HTTP request type
+        ajaxParams: {
+            listadoProveedores: "ok",
+            // comunidad: comunidadID.ID
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+        persistence: {
+            sort: true, //persist sort
+        },
+        initialSort: [
+            { column: "ID", dir: "asc" }, //sort by this first
+        ],
+        rowClick: function (e, row) {
+            var proveedorElegido = row.getData();
+            proveedorID = proveedorElegido;
+            //MODIFICAR USUARIO
+            $("#cuerpoModal").load("FICHAS/fichaProveedor.html", function () {
+                $(".botonesDatosComunidad").show();
+                $(".headComunidadFicha").show();
+                $("#tituloModal").hide();
+                $('#modalDiv').show();
+                $("#accion").val(proveedorID);
+                //Rellenar datos de Campos
+                $("#ID").val(proveedorID["ID"]);
+                $("#NOMBRE").val(proveedorID["NOMBRE"]);
+                $("#ACTIVIDAD").val(proveedorID["ACTIVIDAD"]);
+                $("#TELEFONO").val(proveedorID["TELEFONO"]);
+                $("#EMAIL").val(proveedorID["EMAIL"]);
+                if (proveedorID["ACTIVO"] == "1") {
+                    $("#deshabilitarProveedor").show();
+                    $("#habilitarProveedor").hide();
+                    // $('#deshabilitarProveedor').show();
+                } else if (proveedorID["ACTIVO"] == "0") {
+                    $("#habilitarProveedor").show();
+                    $("#deshabilitarProveedor").hide();
+                }
+            });
+        },
+
+        columns: [
+            {
+                title: "Nº",
+                field: "ID",
+                width: 80,
+                headerFilter: "input",
+            },
+            {
+                title: "NOMBRE",
+
+                field: "NOMBRE",
+                headerFilter: "input",
+            },
+
+            {
+                title: "ACTIVIDAD",
+
+                field: "ACTIVIDAD",
+                headerFilter: "input",
+            },
+
+            {
+                title: "TELEFONO",
+
+                field: "TELEFONO",
+                headerFilter: "input",
+            },
+            {
+                title: "EMAIL",
+
+                field: "EMAIL",
+                headerFilter: "input",
+            },
+
+            {
+                title: "ACTIVO",
+                field: "ACTIVO",
+                width: 110,
+                headerFilter: "input",
+            },
+        ],
+
+        rowFormatter: function (row) {
+            if (row.getData().ACTIVO == "1") {
+                row.getElement().classList.add("activo");
+            } else if (row.getData().ACTIVO == "0") {
+                row.getElement().classList.add("inactivo");
+            }
+        },
+    });
+
+    //CREAR PDF
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera =
+            "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print();
+        x.document.close();
+    });
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx");
+    });
+
+    //LLAMAR AL MODAL NUEVO TERCERO
+
+    $("#botonNuevoProveedor").click(function () {
+        $("#cuerpoModal").load("FICHAS/fichaProveedor.html", function () {
+            $(".activarInput").attr("disabled", false);
+            $(".guardarNuevaComunidad").show();
+            $(".botonesDatosComunidad").hide();
+        });
+        $("#tituloModal").html("<h5>NUEVO PROVEEDOR</h5>");
+        $("#modalDiv").show("fast");
+    });
+
+
+</script>

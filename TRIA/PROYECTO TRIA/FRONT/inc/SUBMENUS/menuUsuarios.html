@@ -1,0 +1,37 @@
+<!-- SUBMENU USUARIOS -->
+
+<div class="subMenu1" id="subMenuUsuarios">
+<!-- 
+    <div type="button" class="subMenuBox subMenuBox1" id="listaComunidades">
+        <p>Comunidades</p>
+    </div> -->
+
+    <div type="button" class="subMenuBox" id="listaRecibos">
+        <p>Recibos</p>
+    </div>
+
+    <!-- <div class="subMenuBox" id="">
+        <p>Datos</p>
+    </div> -->
+
+    <div type="button" class="subMenuBox subMenuBox2" id="">
+        <p>Mantenimiento</p>
+    </div>
+</div>
+
+
+
+<script>
+
+    $('#listaComunidades').click(function () {
+        $('.subMenu').empty();
+        $('.main').load('LISTAS/listaComunidades.html')
+    });
+
+
+
+    $('#listaRecibos').click(function () {
+        $('.main').load('LISTAS/listaRecibosTerceros.html')
+    });
+
+</script>

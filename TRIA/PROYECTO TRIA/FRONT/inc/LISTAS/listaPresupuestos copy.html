@@ -1,0 +1,134 @@
+<div class="containerComunidades mainPropiedades">
+    <div class="headListaComunidades">
+        <p>Lista de presupuestos</p>
+    </div>
+
+    <div id="listadoPresupuestos"></div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary botonPosition" id="botonNuevoPresupuesto" data-toggle="modal"
+                data-target="#nuevoPresupuesto"><span class='fas fa-address-card'></span> Nuevo presupuesto</button>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport" id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    //DESGLOSE PARTES ----------------------------------------------------
+    var table = new Tabulator("#listadoPresupuestos", {
+        persistence: true,
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php", //ajax URL
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST", //ajax HTTP request type
+        ajaxParams: {
+            mantenimiento: mantenimientoID.ID,
+            listaPresupuestos: "ok",
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+        persistence: {
+            sort: true, //persist sort
+        },
+        initialSort: [
+            { column: "ID", dir: "asc" }, //sort by this first
+        ],
+        rowClick: function (e, row) {
+            var mantenimientoElegido = row.getData();
+            mantenimientoID = mantenimientoElegido;
+            //MODIFICAR USUARIO
+            $("#subMenu").load('SUBMENUS/menuUsuarios.html'),
+                $(".main").load("FICHAS/fichaTercero.html", function () {
+                    $("#accion").val(mantenimientoElegido);
+                    //Rellenar datos de Campos
+                    $("#ID").val(mantenimientoElegido['ID']);
+                    $("#MANTENIMIENTO_ID").val(mantenimientoElegido['MANTENIMIENTO_ID']);
+                    $("#REF_EXT").val(mantenimientoElegido['REF_EXT']);
+                    $("#DESCRIPCION").val(mantenimientoElegido['DESCRIPCION']);
+                    $("#RUTA").val(mantenimientoElegido['RUTA']);
+                    $("#IMPORTE").val(mantenimientoElegido['IMPORTE']);
+                    $("#IVA").val(mantenimientoElegido['IVA']);
+                    $("#TOTAL").val(mantenimientoElegido['LOCALIDAD']);
+                });
+        },
+
+        
+        columns: [
+            {
+                title: "Nº", field: "ID", width: 100, headerFilter: "input",
+            },
+            {
+                title: "MANTENIMIENTO", width: 220, field: "MANTENIMIENTO_ID", headerFilter: "input"
+            },
+            {
+                title: "REFERENCIA EXTERNA", width: 220, field: "REF_EXT", headerFilter: "input"
+            },
+            {
+                title: "DESCRIPCION", width: 220, field: "DESCRIPCION", headerFilter: "input"
+            },
+            {
+                title: "DOCUMENTO", width: 150, field: "RUTA", headerFilter: "input"
+            },
+            {
+                title: "IMPORTE", width: 160, field: "IMPORTE", headerFilter: "input"
+            },
+            {
+                title: "IVA", width: 120, field: "IVA", headerFilter: "input"
+            },
+            {
+                title: "TOTAL", field: "TOTAL", headerFilter: "input"
+            },
+        ],
+    });
+
+
+    //CREAR PDF
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+    //LLAMAR AL MODAL NUEVO TERCERO
+
+    $("#botonNuevoPresupuesto").click(function () {
+        $("#tituloModal").html("<h5>NUEVO PRESUPUESTO</h5>");
+        $("#cuerpoModal").load("FICHAS/Presupuesto.html", function () {
+
+        });
+
+        $("#modalDiv").show("fast");
+    });
+
+
+
+
+</script>

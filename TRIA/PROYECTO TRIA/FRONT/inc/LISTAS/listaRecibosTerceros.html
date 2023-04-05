@@ -1,0 +1,146 @@
+<div class="containerComunidades mainPropiedades">
+
+    <div class="breadCrump">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de terceros</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump"></span></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="headListaComunidades">
+        <p>Recibos</p>
+    </div>
+
+    <div id="listadoRecibos"></div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary botonPosition" id="botonNuevoRecibo" data-toggle="modal"
+                data-target="#nuevoRecibo"><span class='fas fa-address-card'></span> Nuevo recibo</button>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport" id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    //TABULATOR
+
+    var table = new Tabulator("#listadoRecibos", {
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: {
+            listaRecibosTercero: "ok",
+            tercero: terceroID.ID
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+        rowClick: function (e, row) {
+            var reciboElegido = row.getData();
+            reciboID = reciboElegido;
+            console.log(reciboElegido);
+
+            $("#cuerpoModal").load('FICHAS/fichaRecibo.html', function () {
+                $("#tituloModal").hide();
+                $('.headComunidadFicha').show();
+                $('.botonesDatosComunidad').show();
+                $('#modalDiv').show();
+                $('#tercero_nombre').hide();
+            
+                $("#accion").val(reciboElegido);
+                // propArray = listaPropiedades(reciboElegido);
+                //Rellenar datos de Campos
+                $("#ID").val(reciboElegido['ID']);
+                $("#COMUNIDAD_ID").val(reciboElegido['COMUNIDAD_ID']);
+                $("#IMPORTE").val(reciboElegido['IMPORTE']);
+                $("#REFERENCIA").val(reciboElegido['REFERENCIA']);
+                $("#DESCRIPCION").val(reciboElegido['DESCRIPCION']);
+                $("#FECHA").val(reciboElegido['FECHA']);
+            });
+        },
+
+        columns: [
+            {
+                title: "Nº", field: "ID", width: 80, headerFilter: "input",
+            },
+
+            {
+                title: "IMPORTE", field: "IMPORTE", headerFilter: "input",
+            },
+
+            {
+                title: "ESTADO", field: "ESTADO", headerFilter: "input"
+            },
+
+            {
+                title: "FECHA", field: "FECHA", headerFilter: "input"
+            },
+        ],
+    });
+
+
+    //DISPARADORES
+
+    $("#botonNuevoRecibo").click(function () {
+        $("#tituloModal").html("<h5>NUEVO RECIBO</h5>");
+        $("#cuerpoModal").load("FICHAS/fichaRecibo.html", function () {
+        });
+
+        $("#modalDiv").show("fast");
+    });
+
+    $("#listComLink").click(function () {
+        $(".main").load('LISTAS/listaTerceros.html')
+    })
+
+    //DISPLAY
+
+
+    $('#inputBreadCrump').html(terceroID.NOMBRE + ' ' + terceroID.APELLIDO1);
+
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+
+</script>

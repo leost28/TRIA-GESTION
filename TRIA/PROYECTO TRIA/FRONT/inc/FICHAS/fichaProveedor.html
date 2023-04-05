@@ -1,0 +1,132 @@
+<div class="" id="fichaProveedor">
+
+    <div class="headComunidadFicha" style="display: none">
+        <p>Datos Proveedor</p>
+    </div>
+
+    <form id="añadirProveedorForm">
+
+        <div class=" form-group dflex campoFormProveedor">
+            <div class="form-group1 ">
+                <label for="inputNombreProveedor">Nombre*</label>
+                <input type="text" class="form-control activarInput requeridoProveedor" id="NOMBRE" name="NOMBRE"
+                    concepto='nombre' disabled="true">
+
+            </div>
+
+            <div class="form-group1">
+                <label for="inputActividad">Actividad*</label>
+                <input type="text" class="form-control activarInput requeridoProveedor" id="ACTIVIDAD" name="ACTIVIDAD"
+                    concepto='actividad' disabled="true">
+
+            </div>
+
+        </div>
+
+        <div class=" form-group dflex campoFormProveedor">
+
+            <div class="form-group1">
+                <label for="inputNIF">Teléfono*</label>
+                <input type="text" class="form-control activarInput requeridoProveedor" id="TELEFONO" name="TELEFONO"
+                    concepto='telefono' disabled="true">
+
+            </div>
+
+            <div class="form-group1">
+                <label for="inputDireccion">Email*</label>
+                <input type="text" class="form-control activarInput requeridoProveedor" id="EMAIL" name="EMAIL"
+                    concepto='email' disabled="true">
+            </div>
+
+        </div>
+
+
+        <div class=" form-group dflex botonesDatosComunidad campoFormProveedor" style="display: none">
+            <div class="dflex">
+                <div class="botoneraHabilitar">
+                    <button type="submit" class="btn btn-primary  botonHabilitar"
+                        id="habilitarProveedor">HABILITAR</button>
+
+                    <button type="submit" class="btn btn-primary  botonHabilitar"
+                        id="deshabilitarProveedor">DESHABILITAR</button>
+                </div>
+
+                <div>
+                    <button class="btn botonEditar" id="activar" onclick="editarProveedor()">EDITAR</button>
+
+                    <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormProveedor"
+                        onclick="modificaProveedor()">GUARDAR</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="guardarNuevaComunidad" style="display:none">
+            <button type="submit" class="btn btn-primary" id="guardarNuevoProveedor"
+                onclick="addProveedor()">GUARDAR</button>
+        </div>
+
+        <div class="form-group1">
+            <input type="text" class="form-control" id="ID" name="ID" hidden>
+        </div>
+    </form>
+
+    <br>
+
+    <div class="alert alert-danger " role="alert" id="divErrores">
+    </div>
+
+    <br>
+
+    <div class="campoRequerido">
+        (*)campo requerido
+    </div>
+
+
+</div>
+
+<script>
+
+    //DISPLAY
+
+    $("#guardarFormProveedor").hide();
+    $("#divErrores").hide();
+
+    // Cargar lista comunidades
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaProveedors.html')
+        $('#subMenu').empty();
+    });
+
+    //ACCIONES
+
+    function editarProveedor() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $("#guardarFormProveedor").toggle();
+    }
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        // alert("envio");
+    });
+
+    // HABILITAR-DESHABILITAR Proveedor
+
+    $('#habilitarProveedor').click(
+        function () {
+            cambiaEstadoProveedor(ProveedorID.ID, "habilitar");
+            $('#deshabilitarProveedor').show();
+            $('#habilitarProveedor').hide();
+        }
+    );
+
+    $('#deshabilitarProveedor').click(
+        function () {
+            cambiaEstadoProveedor(ProveedorID.ID, "deshabilitar");
+            $('#habilitarProveedor').show();
+            $('#deshabilitarProveedor').hide();
+        });
+
+</script>

@@ -1,0 +1,87 @@
+<!-- HEADER -->
+
+
+<div class="logoTria"><img src="../img/triaLOGO.jpg" alt=""></div>
+
+<div class="headerBox" type="button" id="comunidades" id="listComList">
+    <p>Comunidades</p>
+</div>
+
+<div class="headerBox" type="button" id="proveedores">
+    <p>Proveedores</p>
+</div>
+
+<div class="headerBox" type="button" id="financiero">
+    <p>Financiero</p>
+</div>
+
+<!-- <div class="headerBox" type="button" id="documentos">
+    <p>Documentos</p>
+</div> -->
+
+<div class="headerBox" type="button" id="presupuestos">
+    <p>Presupuestos</p>
+</div>
+
+<div class="headerBox" type="button" id="mantenimiento">
+    <p>Mantenimiento</p>
+</div>
+
+<div class="headerBox" type="button" id="configuracion">
+    <p>Configuración</p>
+</div>
+
+
+
+<div class="loginBox">
+    <a href="./login.html"><span><i class="fas fa-2x fa-user"></i></span></a>
+</div>
+
+<!-- <div class="registroBox">
+
+
+    <a href="./index.html"><span><i class="fa-solid fa-2x fa-arrow-right-to-bracket"></i></span></a>
+
+</div> -->
+
+<script>
+
+    //CARGAR ELEMENTOS QUE PULSEMOS EN EL HEADER
+    $('#comunidades').click(function () {
+        $('.main').load('LISTAS/listaComunidades.html');
+        $('#subMenu').empty();
+    });
+
+    $('#proveedores').click(function () {
+        $('.main').load('LISTAS/listaProveedores.html')
+        $('#subMenu').empty();
+    });
+
+    $('#mantenimiento').click(function () {
+        $('.main').load('LISTAS/listaMantenimiento.html')
+        $('#subMenu').empty();
+    });
+
+    $('#presupuestos').click(function () {
+        $('.main').load('LISTAS/listaPresupuestos.html')
+        $('#subMenu').empty();
+    });
+
+    $('#documentos').click(function () {
+        $('.main').load('LISTAS/listaDocumentos.html');
+        $('#containerDocumentos').removeClass('mainPropiedades');
+        $('#subMenu').empty();
+    });
+
+    $('#financiero').click(function () {
+        $('.main').load('LISTAS/listaContabilidad.html')
+        $("#subMenu").load('SUBMENUS/menuFinanciera.html')
+    });
+
+    $('#configuracion').click(function () {
+        $('.main').load('CONFIGURACION/categoriasComunidad.html')
+        $("#subMenu").load('SUBMENUS/menuConfiguracion.html');
+    });
+
+
+</script>

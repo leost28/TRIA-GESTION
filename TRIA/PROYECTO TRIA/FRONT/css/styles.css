@@ -1,0 +1,810 @@
+@import url(reset.css);
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+
+
+:root {
+    /* --colorPrincipal: #a5303b; */
+    /* --colorPrincipal: #9b0e1c; */
+    --colorPrincipal: #940920;
+
+}
+
+/* COLORES #FFC312 */
+/* antiquewhite */
+
+html,
+body {
+    background-color: white;
+    /* background-image: url('https://fotografias.lasexta.com/clipping/cmsimages02/2019/03/21/7067BAE9-7E0E-4562-A921-B3C838E622E5/97.jpg?crop=960,540,x0,y0&width=1600&height=900&optimize=high&format=webply'); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'Numans', sans-serif;
+}
+
+
+/* LOGIN */
+
+.container {
+    /* height: 100%; */
+    align-content: center;
+    margin-top: 150px;
+    font-family: Verdana, Tahoma, sans-serif;
+}
+
+.card {
+    height: 300px;
+    width: 450px;
+    background-color: rgba(104, 0, 0, 0.3) !important;
+}
+
+
+.card-header h3 {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+.input-group-prepend span {
+    width: 50px;
+    background-color: var(--colorPrincipal);
+    color: white !important;
+    border: 0 !important;
+}
+
+.remember {
+    color: white;
+    font-size: 11px;
+}
+
+.remember input {
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+    margin-right: 5px;
+}
+
+.form-control {
+    font-size: 13px;
+}
+
+.login_btn {
+    color: white;
+    background-color: var(--colorPrincipal);
+    width: 100px;
+    font-size: 13px;
+
+}
+
+.login_btn:hover {
+    color: black;
+    background-color: white;
+}
+
+.links {
+    color: white;
+    font-weight: bold;
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+
+.links a {
+    margin: 0 auto;
+
+    margin-bottom: 2px;
+
+}
+
+
+.links2 {
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.4) !important;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.links2 a {
+    color: rgba(0, 0, 0, 0.5);
+    margin-left: 125px;
+}
+
+.fas {
+    font-size: 15px;
+}
+
+
+.links3 {
+    text-decoration: none;
+    color: white !important;
+    text-decoration: none;
+}
+
+
+a {
+    text-decoration: none;
+    color: white;
+    text-decoration: none;
+}
+
+/* REGISTRO */
+
+.cardRegistro {
+    width: 600px;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    padding: 20px;
+}
+
+.inputRegistro {
+    margin-bottom: 20px;
+
+}
+
+.registro_btn {
+    color: white;
+    background-color: var(--colorPrincipal);
+    width: 98%;
+}
+
+.registro_btn:hover {
+    color: black;
+    background-color: white;
+}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------ */
+
+/* INDEX */
+
+
+.header {
+    width: 100%;
+    height: 60px;
+    background-color: var(--colorPrincipal) !important;
+    border-bottom: white 4px solid;
+    display: flex;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background-color: var(--colorPrincipal) !important;
+    border-top: 4px solid white;
+    display: flex;
+    color: white;
+    text-align: center;
+    justify-content: center;
+}
+
+.footerText {
+    margin-top: 15px;
+    font-size: 15px;
+}
+
+a {
+    text-decoration: none !important;
+    color: white !important;
+}
+
+
+
+.headerBox {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 17px;
+    width: 17%;
+    /* border-right: 4px solid white; */
+    text-align: center;
+    font-family: Verdana, Tahoma, sans-serif;
+}
+
+.logoTria {
+    width: 5%;
+    left: 0;
+    margin: 0 auto;
+    object-fit: cover;
+
+}
+
+.logoTria>img {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+
+    margin-right: 10px;
+}
+
+
+.headerBox:hover {
+    background-color: white;
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.headerBox3 {
+    background-color: white !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+a:hover {
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.containerMainSubMenu {
+    /* display: flex; */
+    width: 100%;
+    /* max-height: max-content; */
+    /* height: 100vh; */
+}
+
+.main {
+    /* border: 1px solid var(--colorPrincipal); */
+    /* display: flex; */
+    /* display: table-row; */
+    margin: 0 auto;
+    justify-content: center;
+    align-content: center;
+    padding-right: 4px;
+    width: 100%;
+
+}
+
+.loginBox {
+    padding-top: 15px;
+    padding-right: 1%;
+    width: 5%;
+    height: 2.5%;
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+.registroBox {
+    padding-top: 15px;
+    width: 2.5%;
+    height: 2.5%;
+
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.fa-2x {
+    color: white !important;
+    font-size: 25px;
+}
+
+.fa-2x:hover {
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.marcador {
+    background-color: white;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+/* SUBMENU */
+
+.subMenu {
+    /* width: 16.95%; */
+    width: 14.50%;
+    position: absolute;
+    /* QUITAR HEIGHT */
+    height: 90%;
+    /* margin-top: 0; */
+}
+
+.subMenu1 {
+    width: 100%;
+    /* background-color: rgba(104, 0, 0, 0.3); */
+    background-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    border-right: 4px solid white;
+    border-left: 5.5px solid white;
+    /* max-height: max-content; */
+    display: block !important;
+    /* QUITAR HEIGHT */
+    height: 100%;
+    /* margin-top: 0; */
+}
+
+
+
+.subMenuBox {
+
+    /* margin-top: 50px;
+    margin-left: 50px; */
+    padding: 10%;
+    /* border: 2px solid white; */
+    border-left: none;
+    border-right: none;
+    border-bottom: 4px solid white;
+}
+
+.subMenuBox:hover {
+    background-color: var(--colorPrincipal);
+    /* width: 103%; */
+}
+
+.subMenuBox p {
+    color: white;
+    font-size: 15px;
+    font-family: Verdana, Tahoma, sans-serif;
+    margin: 0px;
+}
+
+.subMenuBox2 {
+    border-bottom: 4px solid white;
+}
+
+.subMenuBox1 {
+    border-top: 0px solid white;
+}
+
+/* INTERFAZ lista Comunidad */
+
+.mainComunidades {
+    margin-left: 14.70%;
+    /* border: 3px solid var(--colorPrincipal); */
+    padding: 12px;
+    width: 85%;
+
+}
+
+.mainPropiedades {
+    margin-left: 14.70%;
+    /* border: 3px solid var(--colorPrincipal); */
+    margin-bottom: 4px;
+    padding: 10px;
+    width: 85%;
+}
+
+.containerMantenimiento {
+    margin-left: 14.70%;
+    margin-right: 4px;
+    /* border: 3px solid var(--colorPrincipal); */
+    padding: 20px;
+    width: 85%;
+
+}
+
+.nuevaCategoria {
+    width: 60%;
+
+}
+
+.w-2 {
+    width: 100%;
+    margin-right: 5%;
+}
+
+.containerComunidades {
+    padding: 20px;
+}
+
+.containerComunidades2 {
+    margin: 20%;
+}
+
+.formularioComunidad {
+    width: 100%;
+}
+
+.dflex {
+    display: flex;
+}
+
+.form-group1 {
+    width: 50%;
+    padding: 2%;
+
+}
+
+label {
+    font-weight: bold;
+}
+
+/* Interfaz Comunidad Ficha */
+
+.headListaComunidades {
+    height: 50px;
+    background-color: var(--colorPrincipal);
+    width: 100%;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+
+}
+
+.botonesDatosComunidad {
+    justify-content: right;
+    text-align: right;
+    float: right;
+    margin-right: 13px;
+}
+
+.botonesPropiedades {
+    margin-right: 15px;
+}
+
+.botonesDatosTercero {
+    float: right;
+}
+
+.botonesTercero {
+    float: right;
+
+}
+
+.campoFormTercero {
+    margin-bottom: 5px !important;
+}
+
+.botonesDatos {
+    float: right;
+}
+
+.botonPosition {
+    float: right;
+
+}
+
+.botoneraExport {
+    float: right !important;
+    margin-right: 4px;
+}
+
+.botonEditar {
+    background-color: var(--colorPrincipal) !important;
+    color: white !important;
+}
+
+.botonEditar:hover {
+    background-color: white !important;
+    color: black !important;
+}
+
+.botonGuardar {
+
+    border: none !important;
+    text-align: right;
+}
+
+#guardarNuevaComunidad {
+
+    border: none !important;
+}
+
+
+.botonGuardar:hover {
+    background-color: white !important;
+    color: black !important;
+}
+
+
+.botoneraHabilitar {
+    margin-right: 20px;
+}
+
+.botonHabilitar {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    margin-right: 4px;
+    border: none !important;
+}
+
+#selectTodos {
+    font-size: 15px !important;
+    padding: 0 !important;
+    margin-top: 5px;
+}
+
+.headComunidadFicha {
+    height: 50px;
+    background-color: var(--colorPrincipal);
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    color: white;
+}
+
+.headComunidadFicha1 {
+    height: 50px;
+
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    color: black;
+    font-weight: bold;
+}
+
+li a {
+    color: rgba(0, 0, 0, 0.9) !important;
+    text-decoration: underline !important;
+}
+
+.breadCrump {
+    margin-left: 5px;
+}
+
+#subMenuComunidades {
+    border-right: 4px white solid;
+    height: 100%;
+}
+
+
+/* MODAL */
+
+#nuevaComunidadModal {
+    width: 100%;
+    height: 100%;
+
+}
+
+
+.guardarNuevaComunidad {
+    float: right;
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+
+/* PROPIEDADES */
+
+#containerPropiedades {
+    margin-left: 15%;
+    margin-right: 4px;
+    border: 3px solid var(--colorPrincipal);
+    padding: 20px;
+    width: 85%;
+}
+
+.botonesNuevaPropiedad {
+    float: right;
+}
+
+#eliminarPropiedad {
+    background-color: white;
+    color: var(--colorPrincipal);
+    border: none !important;
+}
+
+#eliminarBanco {
+    background-color: white;
+    color: var(--colorPrincipal);
+    border: none !important;
+}
+
+#eliminarRecibo {
+    background-color: white;
+    color: var(--colorPrincipal);
+    border: none !important;
+}
+
+#eliminarDocumento {
+    background-color: white;
+    color: var(--colorPrincipal);
+    border: none !important;
+}
+
+#eliminarReciboSeleccionado {
+    background-color: white;
+    color: var(--colorPrincipal);
+    border: 1px solid var(--colorPrincipal) !important;
+}
+
+
+#eliminarPropiedad:hover {
+    border: 1px solid var(--colorPrincipal) !important;
+}
+
+#eliminarBanco:hover {
+    border: 1px solid var(--colorPrincipal) !important;
+}
+
+#eliminarRecibo:hover {
+    border: 1px solid var(--colorPrincipal) !important;
+}
+
+#eliminarDocumento:hover {
+    border: 1px solid var(--colorPrincipal) !important;
+}
+
+#eliminarReciboSeleccionado:hover {
+    border: 1px solid var(--colorPrincipal) !important;
+}
+
+#guardarNuevaComunidad {
+    border: none;
+}
+
+.botonXML {
+    background-color: rgb(255, 171, 15) !important;
+    border: 1px solid rgb(214, 139, 0) !important;
+}
+
+/* MODAL */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* MANTENIMIENTO */
+
+.recurrente {
+    margin-left: 10px;
+}
+
+.input-group-append {
+    cursor: pointer;
+}
+
+.multiselect {
+    width: 325px;
+}
+
+/* TABULATOR */
+#listadoComunidad .activo .tabulator-cell[tabulator-field="ACTIVO"] {
+    background-color: #61ff76;
+    opacity: 0.7;
+}
+
+#listadoComunidad .inactivo .tabulator-cell[tabulator-field="ACTIVO"] {
+    background-color: #ff6161;
+    opacity: 0.7;
+}
+
+#listadoTerceros .activo .tabulator-cell[tabulator-field="ACTIVO"] {
+    background-color: #61ff76;
+    opacity: 0.7;
+}
+
+#listadoTerceros .inactivo .tabulator-cell[tabulator-field="ACTIVO"] {
+    background-color: #ff6161;
+    opacity: 0.7;
+}
+
+#listadoContabilidad .cobrado .tabulator-cell[tabulator-field="ESTADO"] {
+    background-color: #61ff76;
+    opacity: 0.7;
+}
+
+
+.desplegable {
+    width: 10%;
+    height: 3%;
+    background-color: white;
+    position: relative;
+    right: -88.325%;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.abreDesplegable {
+    width: 10%;
+    height: 3%;
+    background-color: white;
+    position: relative;
+    right: -88.325%;
+    cursor: pointer;
+}
+
+.fa-solid {
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    color: gray;
+}
+
+.fa-solid:hover {
+    background-color: var(--colorPrincipal);
+    color: white;
+}
+
+
+.cerrarSubMenu {
+    width: 0;
+}
+
+.cerrarBotonDesplegable {
+    position: absolute;
+    right: 200px;
+}
+
+.tablaPresupuestos {
+    padding: 2.5%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5%;
+}
+
+td {
+    border: 1px solid black !important;
+}
+
+th {
+    border: 1px solid black !important;
+}
+
+tr {
+    border: 2px solid black !important;
+}
+
+.seccionTabla1 {
+    /* background-color: var(--colorPrincipal) !important; */
+    /* color: white; */
+    font-weight: bold;
+}
+
+.seccionTabla2 {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    font-weight: bold;
+}
+
+.headTable {
+    font-weight: bold;
+    /* background-color: rgba(0, 0, 0, 0.1) !important; */
+}
+
+.inputPresupuestos {
+    width: 100%;
+}
+
+th>input {
+    border: none !important;
+    /* font-weight: bold; */
+}
+
+td>input {
+    border: none !important;
+    /* font-weight: bold; */
+}
+
+#Ingresos>td {
+    /* background-color: var(--colorPrincipal) !important;
+    color: white; */
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+
+/* MEDIA QUERY */
+
+@media(max-width: 66.75em) {
+
+    .headerBox {
+        font-size: 10px;
+        width: 400px;
+        /* border: 1px solid white; */
+        padding-right: 4px;
+        padding-left: 4px;
+    }
+
+    .loginBox {
+        margin-left: 15px;
+    }
+
+    .registroBox {
+        margin-left: 15px;
+    }
+
+    .subMenu {
+        width: 17.5%;
+    }
+
+    .subMenuBox {
+        height: 10%;
+    }
+
+    .subMenu p {
+
+        font-size: 10px;
+    }
+
+}
+
+/* AVISOS */
+#avisos {
+    position: fixed;
+    right: 5px;
+    bottom: 50px;
+}

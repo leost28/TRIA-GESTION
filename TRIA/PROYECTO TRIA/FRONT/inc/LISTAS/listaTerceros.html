@@ -1,0 +1,213 @@
+<div class="mainPropiedades">
+  <div class="headListaComunidades">
+    <p>Lista de propietarios</p>
+  </div>
+
+  <div id="listadoTerceros"></div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-primary botonPosition" id="botonNuevoTercero" data-toggle="modal"
+        data-target="#nuevoTercero">
+        <span class="fas fa-address-card"></span> Nuevo tercero
+      </button>
+    </div>
+
+    <div class="col-1 dflex">
+      <button class="btn btn-danger botoneraExport" id="creaPdf">
+        <span class="fas fa-print"></span>
+      </button>
+      <button class="btn btn-success botoneraExport" id="creaExcel">
+        <span class="fas fa-file-excel"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  //DESGLOSE PARTES ----------------------------------------------------
+  var table = new Tabulator("#listadoTerceros", {
+    persistence: true,
+    ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php", //ajax URL
+    dataLoaderLoading: "Un momento!",
+    progressiveLoad: "scroll",
+    placeholder: "Un momento, por favor",
+    ajaxConfig: "POST", //ajax HTTP request type
+    ajaxParams: {
+      datosTerceros: "ok",
+      comunidadID: comunidadID.ID
+    },
+    height: "",
+    width: "100%",
+    layout: "fitColumns",
+    persistence: {
+      sort: true, //persist sort
+    },
+    initialSort: [
+      { column: "ID", dir: "asc" }, //sort by this first
+    ],
+    rowClick: function (e, row) {
+      var terceroElegido = row.getData();
+      terceroID = terceroElegido;
+      //MODIFICAR USUARIO
+      $("#subMenu").load('SUBMENUS/menuComunidades.html'),
+        $("#cuerpoModal").load("FICHAS/fichaTercero.html", function () {
+          $(".botonesDatosComunidad").show();
+          $(".headComunidadFicha").show();
+          $("#tituloModal").hide();
+          $('#modalDiv').show();
+          $("#accion").val(terceroID);
+          //Rellenar datos de Campos
+          $("#ID").val(terceroID["ID"]);
+          $("#NOMBRE").val(terceroID["NOMBRE"]);
+          $("#CCC").val(terceroID["CCC"]);
+          $("#APELLIDO1").val(terceroID["APELLIDO1"]);
+          $("#APELLIDO2").val(terceroID["APELLIDO2"]);
+          $("#NIF").val(terceroID["NIF"]);
+          $("#DIRECCION").val(terceroID["DIRECCION"]);
+          $("#CP").val(terceroID["CP"]);
+          $("#LOCALIDAD").val(terceroID["LOCALIDAD"]);
+          $("#TELEFONO").val(terceroID["TELEFONO"]);
+          $("#EMAIL").val(terceroID["EMAIL"]);
+          if (terceroID["ACTIVO"] == "1") {
+            $("#deshabilitarTercero").show();
+            $("#habilitarTercero").hide();
+            // $('#deshabilitarTercero').show();
+          } else if (terceroID["ACTIVO"] == "0") {
+            $("#habilitarTercero").show();
+            $("#deshabilitarTercero").hide();
+          }
+        });
+    },
+
+    columns: [
+      {
+        title: "Nº",
+        field: "ID",
+        width: 50,
+        headerFilter: "input",
+      },
+      {
+        title: "NOMBRE",
+        width: 100,
+        field: "NOMBRE",
+        headerFilter: "input",
+      },
+      {
+        title: "APELLIDO 1",
+        width: 120,
+        field: "APELLIDO1",
+        headerFilter: "input",
+      },
+      {
+        title: "APELLIDO 2",
+        width: 120,
+        field: "APELLIDO2",
+        headerFilter: "input",
+      },
+
+      {
+        title: "Nº CUENTA",
+        width: 120,
+        field: "CCC",
+        headerFilter: "input",
+      },
+
+      {
+        title: "NIF",
+        width: 100,
+        field: "NIF",
+        headerFilter: "input",
+      },
+      {
+        title: "DIRECCION",
+        width: 180,
+        field: "DIRECCION",
+        headerFilter: "input",
+      },
+      {
+        title: "CP",
+        width: 80,
+        field: "CP",
+        headerFilter: "input",
+      },
+      {
+        title: "LOCALIDAD",
+        width: 140,
+        field: "LOCALIDAD",
+        headerFilter: "input",
+      },
+      {
+        title: "TELEFONO",
+        width: 120,
+        field: "TELEFONO",
+        headerFilter: "input",
+      },
+      {
+        title: "EMAIL",
+        width: 180,
+        field: "EMAIL",
+        headerFilter: "input",
+      },
+
+      {
+        title: "ACTIVO",
+        field: "ACTIVO",
+        width: 80,
+        headerFilter: "input",
+        formatter: function (cell) {
+          var valor = cell.getValue();
+          if (valor == 1) {
+            return "<span>activo</span>";
+          } else {
+            return "<span>inactivo</span>";
+          }
+        },
+      },
+    ],
+
+    rowFormatter: function (row) {
+      if (row.getData().ACTIVO == "1") {
+        row.getElement().classList.add("activo");
+      } else if (row.getData().ACTIVO == "0") {
+        row.getElement().classList.add("inactivo");
+      }
+    },
+  });
+
+  //CREAR PDF
+
+  $("#creaPdf").click(function () {
+    console.log("crearPDF");
+    cuerpo = table.getHtml();
+    cabecera =
+      "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+      "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+    pie = "</body></html>";
+    salidaHtml = cabecera + cuerpo + pie;
+    var x = window.open();
+    x.document.open();
+    x.document.write(salidaHtml);
+    x.print();
+    x.document.close();
+  });
+
+  //CREAR EXCEL
+
+  $("#creaExcel").click(function () {
+    console.log("crearExcel");
+    table.download("xlsx", "partes.xlsx");
+  });
+
+  //LLAMAR AL MODAL NUEVO TERCERO
+
+  $("#botonNuevoTercero").click(function () {
+    $("#cuerpoModal").load("FICHAS/fichaTercero.html", function () {
+      $(".activarInput").attr("disabled", false);
+      $("#fichaTercero").removeClass("mainComunidades");
+      $(".guardarNuevaComunidad").show();
+    });
+    $("#tituloModal").html("<h5>NUEVO PROPIETARIO</h5>");
+    $("#modalDiv").show("fast");
+  });
+</script>

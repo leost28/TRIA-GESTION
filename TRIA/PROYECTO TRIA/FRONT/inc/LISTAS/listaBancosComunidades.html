@@ -1,0 +1,165 @@
+<div class="containerComunidades mainPropiedades">
+
+    <div class="breadCrump">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de comunidades</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump"></span></li>
+                <li class="breadcrumb-item">Bancos</li>
+            </ol>
+        </nav>
+    </div>
+
+
+    <div class="headListaComunidades">
+        <p>Bancos</p>
+    </div>
+
+    <div id="listadoBancos"></div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary botonPosition" id="botonNuevoBanco" data-toggle="modal"
+                data-target="#nuevoBanco"><span class='fas fa-address-card'></span> Nuevo banco</button>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport" id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    //TABULATOR
+
+    var table = new Tabulator("#listadoBancos", {
+
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: {
+            listadoBancos: "ok",
+            comunidadID: comunidadID.ID,
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+        rowClick: function (e, row) {
+
+            alert('rowclick');
+            var bancoElegido = row.getData();
+            bancoID = bancoElegido
+            console.log(bancoElegido);
+
+
+            $("#cuerpoModal").load("FICHAS/fichaBancos.html", function () {
+
+                $("#modalDiv").show();
+                $('#botonesBanco').show();
+                $('#modificaBanco').hide();
+
+                //PINTAR DATOS FORMULARIO
+
+                $("#ID").val(bancoElegido['ID']);
+                $("#COMUNIDAD_ID").val(bancoElegido['COMUNIDAD_ID']);
+                $("#NOMBRE").val(bancoElegido['NOMBRE']);
+                $("#NUMERO_CUENTA").val(bancoElegido['NUMERO_CUENTA']);
+                $("#BIC").val(bancoElegido['BIC']);
+                $("#TIPO option[value='" + bancoElegido[TIPO] + "']").attr(
+                    "selected",
+                    "selected",
+                );
+            });
+        },
+
+
+        columns: [
+            {
+                title: "Nº", field: "ID", width: "80", headerFilter: "input",
+            },
+
+            {
+                title: "NOMBRE", field: "NOMBRE", headerFilter: "input",
+            },
+
+            {
+                title: "TIPO", field: "TIPO", headerFilter: "input",
+            },
+
+            {
+                title: "Nº DE CUENTA", field: "NUMERO_CUENTA", headerFilter: "input",
+            },
+
+            {
+                title: "BIC", field: "BIC", headerFilter: "input",
+            },
+        ],
+
+    });
+
+
+    //ACCIONES
+
+    $("#botonNuevoBanco").click(function () {
+        $("#tituloModal").html("<h5>NUEVO BANCO</h5>");
+
+        $("#cuerpoModal").load("FICHAS/fichaBancos.html", function () {
+            $(".guardarNuevaComunidad").show();
+            $('input').attr('disabled', false);
+            $('select').attr('disabled', false);
+        });
+        $("#modalDiv").show("fast");
+    });
+
+
+    //DISPLAY
+
+    $('#inputBreadCrump').html(comunidadID.DESCRIPCION);
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaComunidades.html')
+        $('#subMenu').empty();
+    });
+
+
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+    // $('input').attr('disabled', false);
+    //             $('select').attr('disabled', false);
+</script>

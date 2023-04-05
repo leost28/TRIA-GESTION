@@ -1,0 +1,177 @@
+<div class="containerComunidades" id="containerDocumentos">
+
+
+
+
+    <div class="breadCrump" style="display:none">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de comunidades</a></li>
+                <li class="breadcrumb-item" aria-current="page"><em>Todos los documentos</em><br></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="headListaComunidades">
+        <p>Documentos</p>
+    </div>
+
+    <div id="listadoDocumentos" class=""></div>
+    <br>
+    <div class="row">
+        <div class="col guardarNuevaComunidad">
+            <button class="btn btn-primary botonPosition" id="botonNuevoDocumento" data-toggle="modal"
+                data-target="#nuevoDocumento"><span class='fas fa-address-card'></span> Nuevo
+                documento</button>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport " id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport  " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    //TABULATOR
+
+    var table = new Tabulator("#listadoDocumentos", {
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: { listaDocumentos: "ok" },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+
+        rowClick: function (e, row) {
+
+            var documentoElegido = row.getData();
+
+            documentoID = documentoElegido;
+            console.log(documentoElegido);
+
+            // $("#subMenu").load('menuComunidades.html'),
+            $("#cuerpoModal").load("FICHAS/fichaDocumento.html", function () {
+                $("#tituloModal").hide();
+                $('.headComunidadFicha').show();
+                $('.botonesDatosComunidad').show();
+                $('#modalDiv').show();
+                $("#accion").val(documentoElegido);
+                // propArray = listaDocumentos(documentoElegido);
+                //Rellenar datos de Campos
+                $("#ID").val(documentoElegido['ID']);
+                $("#NOMBRE").val(documentoElegido['NOMBRE']);
+                $("#PERMISO").val(documentoElegido['PERMISO']);
+                $("#FK_ID").val(documentoElegido['FK_ID']);
+                $("#FK_TABLA").val(documentoElegido['FK_TABLA']);
+            });
+        },
+
+        columns: [
+            {
+                title: "Nº", field: "ID", width: 50, headerFilter: "input",
+            },
+
+            {
+                title: "NOMBRE", field: "NOMBRE", headerFilter: "input"
+            },
+
+            {
+                title: "COMUNIDAD", field: "NOMBRECOMUNIDAD", headerFilter: "input"
+            },
+
+            {
+                title: "DOCUMENTO", field: "agregarDocumento", headerFilter: "input"
+            },
+
+
+            // var botones = function (cell, formatterParams, onRendered) { //plain text value
+            //     return "<i class='fa fa-print'>function_trigger</i>";
+            // };
+
+            // {
+            //     title: "Delete/descargar", field: "buttons", formatter: botones, width: 100, align: "center", cellClick: function (e, cell) {
+
+            //         //button's function for example 
+            //         var Btn = document.createElement('Button');
+            //         Btn.id = "Btn_Id";
+            //     }
+            // },
+            // {
+
+            //     title: "ELIMINAR", field: "BOTONELIMINAR", headerFilter: "input"
+            // },
+            // {
+            //     title: "DESCARGAR", field: "BOTONDESCARGAR", headerFilter: "input"
+            // },
+            //columna icono borrar
+            //icono descargar
+        ],
+
+    });
+
+
+    //LLAMAR AL MODAL NUEVO DOCUMENTO
+
+    $("#botonNuevoDocumento").click(function () {
+        $("#tituloModal").show();
+        $('.headComunidadFicha').hide();
+        $("#tituloModal").html("<h5>NUEVO DOCUMENTO</h5>");
+
+        $("#cuerpoModal").load("FICHAS/fichaDocumento.html", function () {
+            $('.guardarNuevaComunidad').show();
+            $('input').attr('disabled', false);
+            $('select').attr('disabled', false);
+        });
+
+        $("#modalDiv").show("fast");
+
+    });
+
+    // Cargar lista comunidades
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaComunidades.html')
+        $('#subMenu').empty();
+    });
+
+
+
+    //CREAR PDF
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+</script>

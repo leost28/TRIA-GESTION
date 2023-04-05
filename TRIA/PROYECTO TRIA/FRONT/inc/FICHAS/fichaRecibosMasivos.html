@@ -1,0 +1,129 @@
+<div id="containerRecibos">
+
+    <div class="headComunidadFicha" style="display: none">
+        <p>Datos recibo</p>
+    </div>
+
+    <form id="recibosMasivosForm">
+
+        <div class=" form-group dflex">
+
+            <div class="form-group1">
+                <label for="inputImporteRecibo">Importe*</label>
+                <input type="text" class="form-control activarInput requerido" id="IMPORTE" name="IMPORTE"
+                    concepto='importe' disabled="true">
+            </div>
+
+            <div class="form-group1" id="tercero_nombre">
+                <label for=""> Propiedades*</label>
+                <select class="form-select w-100 activarInput requerido" id="PROPIEDAD_NOMBRE" name="PROPIEDAD_NOMBRE"
+                    concepto="tercero" disabled="true" multiple="multiple">
+                </select>
+                <div class="row">
+                    <div class="col-8">
+                        <p style="font-size: small;" class="mt-2">pulse 'ctrl' + 'click' para seleccionar varios
+                            propietarios
+                        </p>
+                    </div>
+                    <div class="col-4">
+                        <button id="selectTodos" class="btn btn-primary w-100">seleccionar todos</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group1">
+                <label for="FECHA">Fecha*</label>
+                <input type="date" id="FECHA" name="FECHA" class="form-control activarInput requerido" concepto="fecha"
+                    disabled="true">
+            </div>
+
+        </div>
+
+
+        <div class=" form-group dflex">
+
+            <div class="form-group1">
+                <label for="inputDescripcion">Descripcion*</label>
+                <input type="textarea" class="form-control activarInput requerido" placeholder="Cuota mensual"
+                    id="DESCRIPCION" name="DESCRIPCION" concepto='descripción' disabled="true">
+            </div>
+
+            <div class="form-group1">
+                <label for="inputReferenciaRecibo">Referencia*</label>
+                <input type="text" id="REFERENCIA" name="REFERENCIA" class="form-control activarInput requerido"
+                    concepto="referencia" disabled="true">
+            </div>
+
+            <div class="form-group1" hidden>
+                <label for="inputCCC">Numero de cuenta*</label>
+                <input type="text" class="form-control activarInput" id="CCC" name="CCC" concepto='numero de cuenta'
+                    disabled="true">
+            </div>
+
+        </div>
+
+        <div class="form-group1">
+            <input type="text" class="form-control" id="ID" name="ID" hidden>
+        </div>
+
+        <br>
+        <div class="alert alert-danger " role="alert" id="divErrores" style="display: none">
+
+        </div>
+
+        <br>
+
+        <div class="campoRequerido">
+            *campo requerido
+        </div>
+    </form>
+
+    <div class="guardarNuevaComunidad" style="display: none">
+        <button type="submit" class="btn btn-primary" id="guardarNuevaPropiedad"
+            onclick="addRecibosMasivosComunidad()">GUARDAR</button>
+    </div>
+
+
+</div>
+
+
+<script>
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+    });
+
+    // DISPLAY
+
+    // tercerosSelect("#PROPIEDAD_NOMBRE");
+    propiedadesSelect("#PROPIEDAD_NOMBRE");
+    $("#guardarFormComunidad").hide();
+    $("#divErrores").hide();
+
+
+    //ACCIONES
+
+    // ELIMINAR RECIBO
+    $('#eliminarRecibo').click(function () {
+        $('#supRecibo').toggle();
+        $('#eliminarRecibo').hide();
+    });
+
+    function editarFormulario() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $("#guardarFormComunidad").toggle();
+    }
+
+    $('#selectTodos').click(function () {
+        $('#PROPIEDAD_NOMBRE option').attr('selected', true);
+    })
+
+
+
+
+
+
+
+</script>

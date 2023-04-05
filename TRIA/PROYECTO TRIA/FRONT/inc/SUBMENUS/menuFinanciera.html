@@ -1,0 +1,42 @@
+<!-- SUBMENU MANTENIMIENTO -->
+
+<div class="subMenu1" id="subMenuFinanciera">
+
+    <div type="button" class="subMenuBox subMenuBox1" id="listaContabilidad">
+        <p>Contabilidad</p>
+    </div>
+
+    <div type="button" class="subMenuBox" id="listaRecibos">
+        <p>Recibos</p>
+
+    </div>
+
+    <div type="button" class="subMenuBox" id="listaTesoreria">
+        <p>Banco/Tesorería</p>
+    </div>
+
+    <div class="subMenuBox subMenuBox2" id="">
+        <p>Domiciliaciones</p>
+    </div>
+
+</div>
+
+<script>
+
+    //ACCIONES
+
+    $('#listaRecibos').click(function () {
+        $('.main').load('LISTAS/listaRecibos.html')
+    });
+
+    $('#listaContabilidad').click(function () {
+        $('.main').load('LISTAS/listaContabilidad.html')
+    });
+
+    $('#listaTesoreria').click(function () {
+        $('.main').load('LISTAS/listaTesoreria.html')
+    });
+
+
+
+</script>

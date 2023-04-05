@@ -1,0 +1,227 @@
+<div class="containerComunidades mainPropiedades">
+
+    <div class="breadCrump">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de comunidades</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump"></span></li>
+                <li class="breadcrumb-item">Recibos</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="headListaComunidades">
+        <p>Recibos</p>
+    </div>
+
+    <div id="listadoRecibos"></div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary botonPosition" id="botonNuevoRecibo" data-toggle="modal"
+                data-target="#nuevoRecibo"><span class='fas fa-address-card'></span> Nuevo recibo</button>
+            <div class="botones dflex">
+                <button class="btn btn-primary botonXML" style="margin-right: 5px" onclick="crearXML()">Exportar
+                    XML</button>
+                <button class="btn btn-primary" style="margin-right: 5px" id="recibosMasivos">Crear varios
+                    recibos</button>
+                <button type="submit" class="btn btn-danger" id="eliminarReciboSeleccionado">ELIMINAR SELECCIÓN</button>
+                <button class="btn btn-danger mod" id="supRecibo" onclick="eliminarRecibosSeleccionados()"
+                    style="display: none"><strong>Si,
+                        eliminar
+                        recibos</strong></button>
+            </div>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport" id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+
+    //TABULATOR
+
+    var tablaRecibos = new Tabulator("#listadoRecibos", {
+
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: {
+            listaRecibosComunidad: "ok",
+            comunidadID: comunidadID.ID,
+
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+        rowClick: function (e, row) {
+            reciboID = row.getData();
+
+            // $("#subMenu").load('menuFinanciera.html'),
+            $("#cuerpoModal").load('FICHAS/fichaRecibo.html', function () {
+                $("#tituloModal").hide();
+                $('.headComunidadFicha').show();
+                $('.botonesDatosComunidad').show();
+                $('#modalDiv').show();
+                $("#accion").val(reciboID);
+                //Rellenar datos de Campos
+                $("#ID").val(reciboID['ID']);
+                $("#COMUNIDAD_ID").val(reciboID['COMUNIDAD_ID']);
+                $("#TERCERO_NOMBRE").val(reciboID['terceroNombre']);
+                // $("#N_CUENTA").val(reciboID['CCC']);
+                $("#IMPORTE").val(reciboID['IMPORTE']);
+                $("#REFERENCIA").val(reciboID['REFERENCIA']);
+                $("#DESCRIPCION").val(reciboID['DESCRIPCION']);
+                $("#FECHA").val(reciboID['FECHA']);
+            });
+        },
+
+
+        columns: [
+
+
+            {
+                width: 50, field: "checkBox", formatter: "rowSelection", titleFormatter: "rowSelection", headerHozAlign: "center", hozAlign: "center", headerSort: false, cellClick: function (e, cell) {
+                    cell.getRow().toggleSelect()
+                }
+            },
+
+
+            {
+                title: "Nº", field: "ID", width: 60, headerFilter: "input",
+            },
+
+            {
+                title: "IMPORTE", field: "IMPORTE", headerFilter: "input", formatter: function (cell) {
+                    var valor = cell.getValue();
+                    return valor + '€'
+                }
+            },
+
+            {
+                title: "TERCERO", field: "TERCERO_NOMBRE", headerFilter: "input",
+            },
+
+            {
+                title: "Nº CUENTA", field: "CCC", headerFilter: "input",
+            },
+
+            {
+                title: "REFERENCIA", field: "REFERENCIA", headerFilter: "input"
+            },
+            {
+                title: "DESCRIPCION", field: "DESCRIPCION", headerFilter: "input",
+            },
+
+            {
+                title: "FECHA", field: "FECHA", headerFilter: "input",
+                formatter: "datetime", formatterParams: {
+                    outputFormat: "DD/MM/YY",
+                    invalidPlaceholder: "(invalid date)",
+                }
+            },
+
+        ],
+
+    });
+
+    //ACCIONES
+
+    $("#botonNuevoRecibo").click(function () {
+        $("#tituloModal").html("<h5>NUEVO RECIBO</h5>");
+        $("#tituloModal").show();
+        $("#cuerpoModal").load("FICHAS/fichaRecibo.html", function () {
+            $('.guardarNuevaComunidad').show();
+            $('input').attr('disabled', false);
+            $('select').attr('disabled', false);
+        });
+
+        $("#modalDiv").show("fast");
+    });
+
+    $("#recibosMasivos").click(function () {
+        $("#tituloModal").html("<h5>RECIBOS MASIVOS</h5>");
+        $("#tituloModal").show();
+        $("#cuerpoModal").load("FICHAS/fichaRecibosMasivos.html", function () {
+            $('.guardarNuevaComunidad').show();
+            $('input').attr('disabled', false);
+            $('select').attr('disabled', false);
+        });
+
+        $("#modalDiv").show("fast");
+    });
+
+
+    //DISPLAY
+
+    $('#inputBreadCrump').html(comunidadID.DESCRIPCION);
+
+    //ACCIONES
+    //Crear PDF
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = tablaRecibos.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-tablaRecibos{width: 100%;border-style: solid;}.tabulator-print-tablaRecibos-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+    //Crear Excel
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        tablaRecibos.download("xlsx", "partes.xlsx")
+    });
+
+    //Eiminar recibo
+
+    // ELIMINAR PROPIEDAD
+    $('#eliminarReciboSeleccionado').click(function () {
+        $('#supRecibo').toggle();
+        $('#eliminarReciboSeleccionado').hide();
+    });
+
+    //RECUPERAR ID DE CHECKBOX
+
+    // function seleccionarRecibos() {
+    //     var selectedRows = tablaRecibos.getSelectedData();
+    //     var idRows = new Object;
+    //     if (existe(selectedRows)) {
+    //         $.each(selectedRows, function (key, value) {
+    //             idRows.push(value['0']);
+    //         });
+    //         console.log(idRows);
+    //     }
+    // }
+
+
+
+
+
+
+</script>

@@ -1,0 +1,204 @@
+<div class="containerComunidades IDmantenimiento">
+    <div class="headListaComunidades">
+        <p>Mantenimientos</p>
+    </div>
+
+    <div id="listadoMantenimiento"></div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary botonPosition" id="botonNuevoMantenimiento" data-toggle="modal"
+                data-target="#nuevoMantenimiento"><span class='fas fa-address-card'></span> Nuevo mantenimiento</button>
+        </div>
+
+        <div class="col-1 dflex">
+            <button class="btn btn-danger botoneraExport" id="creaPdf"><span class='fas fa-print'></span>
+            </button>
+            <button class="btn btn-success botoneraExport " id="creaExcel"><span class='fas fa-file-excel'></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    //VARIABLES
+
+    //DISPARADORES
+
+    //DISPLAY
+
+    var table = new Tabulator("#listadoMantenimiento", {
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: { listaMantenimiento: "ok" },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+        rowClick: function (e, row) {
+            var mantenimientoElegido = row.getData();
+            mantenimientoID = mantenimientoElegido
+            console.log(mantenimientoElegido);
+
+            $("#subMenu").load('SUBMENUS/menuMantenimiento.html'),
+                $(".main").load("FICHAS/fichaMantenimiento.html", function () {
+                    $("#accion").val(mantenimientoElegido);
+                    $(".botonesDatoscomunidad").show();
+                    // propArray = listaPropiedades(mantenimientoElegido);
+                    //Rellenar datos de Campos
+                    $("#ID").val(mantenimientoElegido['ID']);
+                    $("#COMUNIDAD_ID").val(mantenimientoElegido['COMUNIDAD_ID']);
+                    $("#COMUNIDAD_NOMBRE").val(mantenimientoElegido['COMUNIDAD_ID']);
+                    $("#REFERENCIA").val(mantenimientoElegido['REFERENCIA']);
+                    $("#DESCRIPCION").val(mantenimientoElegido['DESCRIPCION']);
+                    $("#RECURRENTE").val(mantenimientoElegido['RECURRENTE']);
+                    $("#INTERVENCION").val(mantenimientoElegido['INTERVENCION']);
+                    $("#FECHA_INICIO").val(mantenimientoElegido['FECHA_INICIO']);
+                    $("#MESES_INTERVENCION option[value=" + mantenimientoElegido.MESES_INTERVENCION + "]").attr('selected', 'selected');
+                    //HABILITAR O DESABILITAR
+                    if (mantenimientoElegido['ACTIVO'] == '1') {
+                        $('#habilitarMantenimiento  ').hide();
+                        $('#inhabilitarMantenimiento  ').show()
+                    } if (mantenimientoElegido['ACTIVO'] == '0') {
+                        $('#inhabilitarMantenimiento  ').hide();
+                        $('#habilitarMantenimiento  ').show();
+                    };
+
+                });
+        },
+
+        columns: [
+            {
+                title: "REFERENCIA", field: "ID", width: 100, headerFilter: "input",
+            },
+
+            {
+                title: "COMUNIDAD", field: "COMUNIDAD_NOMBRE", width: 170, headerFilter: "input",
+            },
+
+            {
+                title: "REFERENCIA", field: "REFERENCIA", width: 170, headerFilter: "input",
+            },
+
+            {
+                title: "DESCRIPCION", field: "DESCRIPCION", width: 170, headerFilter: "input"
+            },
+
+            {
+                title: "RECURRENTE", field: "RECURRENTE", width: 170, headerFilter: "input", formatter: function (cell) {
+                    var valor = cell.getValue();
+                    if (valor == '1') {
+                        return 'SI'
+                    } else {
+                        return 'NO'
+                    }
+                }
+            },
+
+            {
+                title: "INTERVECION", field: "INTERVENCION", width: 170, headerFilter: "input", formatter: function (cell) {
+                    var valor = cell.getValue();
+                    if (valor == '1') {
+                        return 'SI'
+                    } else {
+                        return 'NO'
+                    }
+                }
+            },
+            {
+                title: "FECHA DE INICIO", field: "FINICIO", width: 160, headerFilter: "input",
+                formatter: "datetime", formatterParams: {
+                    outputFormat: "DD/MM/YY",
+                    invalidPlaceholder: "(invalid date)",
+                }
+            },
+
+            {
+                title: "FECHA FINAL", field: "FFINAL", width: 160, headerFilter: "input",
+                formatter: "datetime", formatterParams: {
+                    outputFormat: "DD/MM/YY",
+                    invalidPlaceholder: "(invalid date)",
+                }
+            },
+
+            {
+                title: "ACTIVO",
+                field: "ACTIVO",
+                width: 100,
+                headerFilter: "input",
+                formatter: function (cell) {
+                    var valor = cell.getValue();
+                    if (valor == 1) {
+                        return "<span>activo</span>";
+                    } else {
+                        return "<span>inactivo</span>";
+                    }
+                },
+            },
+        ],
+
+        rowFormatter: function (row) {
+            if (row.getData().ACTIVO == 1) {
+                row.getElement().classList.add("activo");
+            } else if (row.getData().ACTIVO == 0) {
+                row.getElement().classList.add("inactivo");
+            }
+        },
+    });
+
+    //Cargar lista de comunidades
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaComunidades.html')
+        $('#subMenu').empty();
+    });
+
+    //BREADCRUMP
+
+    $('#inputBreadCrump').html(comunidadID.DESCRIPCION);
+
+    //LLAMAR AL MODAL NUEVA COMUNIDAD
+
+    $("#botonNuevoMantenimiento").click(function () {
+        $("#tituloModal").html("<h5>NUEVO MANTENIMIENTO</h5>");
+        $("#cuerpoModal").load("FICHAS/fichaMantenimiento.html", function () {
+        });
+        $("#modalDiv").show("fast");
+    });
+
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+
+</script>

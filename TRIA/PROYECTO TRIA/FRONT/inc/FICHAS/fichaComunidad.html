@@ -1,0 +1,209 @@
+<div class="mainComunidades" id="fichaComunidad">
+
+    <div class="breadCrump" style="display: none">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de comunidades</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump"></span></li>
+            </ol>
+        </nav>
+    </div>
+
+
+    <div class="headComunidadFicha" style="display: none">
+        <p>Datos Generales</p>
+    </div>
+
+    <div class="formularioComunidad" id="formularioComunidad">
+
+        <form id="añadirComunidadForm">
+
+            <div class=" form-group dflex">
+                <div class="form-group1">
+                    <label for="inputDescripcion">Descripción*</label>
+                    <input type="text" class="form-control activarInput requerido" id="DESCRIPCION" name="DESCRIPCION"
+                        concepto='descripción' disabled="true">
+
+                </div>
+
+                <div class="form-group1">
+                    <label for="inputDireccion">Dirección*</label>
+                    <input type="text" class="form-control activarInput requerido" id="DIRECCION" name="DIRECCION"
+                        concepto='dirección' disabled="true">
+
+                </div>
+            </div>
+
+            <div class="form-group dflex">
+                <div class="form-group1 ">
+                    <label for="CP">Código Postal*</label>
+                    <input type="text" class="form-control activarInput requerido" id="CP" name="CP"
+                        concepto='código postal' disabled="true">
+                </div>
+
+                <div class="form-group1">
+                    <label for="inputLocalidad">Localidad*</label>
+                    <input type="text" class="form-control activarInput requerido" id="LOCALIDAD" name="LOCALIDAD"
+                        concepto='localidad' disabled="true">
+                </div>
+                
+                <div class="form-group1">
+                    <label for=""> CATEGORIAS</label>
+                    <select class="form-select w-100 activarInput requerido" id="CATEGORIAS" name="CATEGORIAS[]"
+                        concepto="categorias" disabled="true" multiple="multiple">
+                    </select>
+                </div>
+            </div>
+
+
+
+            <div class=" dflex">
+                <div class="form-group1">
+                    <label for="REF_CATASTRAL">Referencia Catastral</label>
+                    <input type="text" class="form-control activarInput" id="REF_CATASTRAL" name="REF_CATASTRAL"
+                        disabled="true">
+                </div>
+                <div class="form-group1">
+                    <label for="CIF">CIF*</label>
+                    <input type="text" class="form-control activarInput requerido" id="CIF" name="CIF" concepto='CIF'
+                        disabled="true">
+
+                </div>
+
+                <div class="form-group1 ">
+
+                    <label for="inputState">Cuota</label>
+                    <select id="CUOTA" name="CUOTA" class="form-select activarInput" disabled="true">
+                        <option>Alicuota</option>
+                        <option>Participación</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group1">
+                <input type="text" class="form-control activarInput" id="ID" name="ID" style="display: none">
+            </div>
+
+        </form>
+
+
+
+
+        <div class="botonesDatosComunidad dflex" style="display: none">
+
+            <div class="botoneraHabilitar">
+                <button type="submit" class="btn btn-primary  botonHabilitar" id="habilitarComunidad">HABILITAR</button>
+
+                <button type="submit" class="btn btn-primary  botonHabilitar"
+                    id="deshabilitarComunidad">DESHABILITAR</button>
+            </div>
+
+            <div class="botonesDatosComunidad ">
+                <button class="btn botonEditar" id="activar" onclick="editarFormulario()">EDITAR</button>
+
+                <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormComunidad"
+                    onclick="modificaComunidad()">GUARDAR</button>
+
+            </div>
+
+        </div>
+
+        <div class="guardarNuevaComunidad" style="display: none">
+
+            <button type="submit" class="btn btn-primary" id="guardarNuevaComunidad"
+                onclick=addComunidad()>GUARDAR</button>
+
+        </div>
+
+    </div>
+
+    <br>
+    <div class="alert alert-danger " role="alert" id="divErrores">
+
+    </div>
+
+    <br>
+
+    <div class="campoRequerido">
+        (*)campo requerido
+    </div>
+
+</div>
+
+
+<script>
+
+    //VARIABLES
+
+    //DISPLAY
+
+    $("#guardarFormComunidad").hide();
+    $("#divErrores").hide();
+    $('#inputBreadCrump').html(comunidadID.DESCRIPCION);
+
+    $("#ID").val(comunidadID['ID']);
+    $("#DESCRIPCION").val(comunidadID['DESCRIPCION']);
+    $("#DIRECCION").val(comunidadID['DIRECCION']);
+    $("#CP").val(comunidadID['CP']);
+    $("#LOCALIDAD").val(comunidadID['LOCALIDAD']);
+    $("#REF_CATASTRAL").val(comunidadID['REF_CATASTRAL']);
+    $("#CIF").val(comunidadID['CIF']);
+    $("#CUOTA option[value=" + comunidadID.CUOTA + "]").attr('selected', 'selected');
+    //HABILITAR O DESABILITAR
+    $('#habilitarComunidad').hide();
+    $('#deshabilitarComunidad').hide();
+    if (comunidadID['ACTIVO'] == '1') {
+        $('#deshabilitarComunidad').show();
+    } else {
+        $('#habilitarComunidad').show();
+    }
+
+
+    // Cargar lista comunidades
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaComunidades.html')
+        $('#subMenu').empty();
+    });
+
+    //ACCIONES
+
+    function editarFormulario() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $("#guardarFormComunidad").toggle();
+    }
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        alert("envio");
+    });
+
+
+
+
+    // HABILITAR-DESHABILITAR COMUNIDAD
+
+    $('#habilitarComunidad').click(
+        function () {
+            cambiaEstado(comunidadID.ID, "habilitar");
+            $('#deshabilitarComunidad').show();
+            $('#habilitarComunidad').hide();
+        }
+    );
+
+
+    $('#deshabilitarComunidad').click(
+        function () {
+            cambiaEstado(comunidadID.ID, "deshabilitar");
+            $('#habilitarComunidad').show();
+            $('#deshabilitarComunidad').hide();
+        });
+
+    //CARGAR CATEGORIAS
+    
+
+</script>

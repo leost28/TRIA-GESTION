@@ -1,0 +1,278 @@
+<div class="containerComunidades mainPropiedades">
+  <div class="breadCrump">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li type="button" class="breadcrumb-item" id="listComLink">
+          <a>Lista de comunidades</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <span id="inputBreadCrump"></span>
+        </li>
+        <li class="breadcrumb-item">Contabilidad</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="headListaComunidades">
+    <p>Contabilidad</p>
+    <span style="color: white" id="tituloLista"></span>
+  </div>
+
+  <div id="listadoContabilidad"></div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-primary botonPosition" id="botonNuevaContabilidad" data-toggle="modal"
+        data-target="#nuevaContabilidad">
+        <span class="fas fa-address-card"></span> Nuevo apunte
+      </button>
+    </div>
+
+    <div class="col-1 dflex">
+      <button class="btn btn-danger botoneraExport" id="creaPdf">
+        <span class="fas fa-print"></span>
+      </button>
+      <button class="btn btn-success botoneraExport" id="creaExcel">
+        <span class="fas fa-file-excel"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  //TABULATOR
+
+  var table = new Tabulator("#listadoContabilidad", {
+
+    ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+    dataLoaderLoading: "Un momento!",
+    progressiveLoad: "scroll",
+    placeholder: "Un momento, por favor",
+    ajaxConfig: "POST",
+    ajaxParams: {
+      listaContabilidadComunidad: "ok",
+      comunidad: comunidadID.ID,
+
+    },
+    height: "",
+    width: "100%",
+    layout: "fitColumns",
+
+    sort: true,
+    initialSort: [{ column: "ID", dir: "asc" }],
+
+    rowClick: function (e, row) {
+      contabilidadID = row.getData();
+
+      console.log(contabilidadID);
+      $("#cuerpoModal").load("FICHAS/fichaContabilidad.html", function () {
+        $(".headComunidadFicha").show();
+        $("#tituloModal").hide();
+        $(".botonesDatosComunidad").show();
+        $("#modalDiv").show();
+        $("#accion").val(contabilidadID);
+        // propArray = listaPropiedades(contabilidadID);
+        //Rellenar datos de Campos
+        $("#ID").val(contabilidadID["ID"]);
+        $("#FECHA").val(contabilidadID["FECHA"]);
+        $("#FECHA_VTO").val(contabilidadID["FECHA_VTO"]);
+        $("#COMUNIDAD_ID").val(contabilidadID["COMUNIDAD_ID"]);
+        $("#PROPIEDAD_ID").val(contabilidadID["PROPIEDAD_ID"]);
+        // $("#CATEGORIA").val(contabilidadID['CATEGORIA']);
+        $("#BI").val(contabilidadID["BI"]);
+        $("#IVA").val(contabilidadID["IVA"]);
+        $("#DESCRIPCION").val(contabilidadID["DESCRIPCION"]);
+        $("#TIPO option[value=" + contabilidadID.TIPO + "]").attr(
+          "selected",
+          "selected"
+        );
+        $("#TOTAL").val(
+          contabilidadID.IMPORTE +
+          (contabilidadID.IVA / 100) * contabilidadID.IMPORTE
+        );
+
+        $("#ESTADO").val(contabilidadID["ESTADO"]);
+
+        setTimeout(function () {
+          $("#PROPIEDAD_NOMBRE option[value='" + contabilidadID.PROP_ID + "']").attr("selected", "selected");
+          propiedadID.ID = contabilidadID.PROP_ID;
+          tercerosSelectProp("#TERCERO_NOMBRE", propiedadID.ID, 0);
+          $("#TERCERO_NOMBRE option[value='" + contabilidadID.TERC_ID + "']"
+          ).attr("selected", "selected");
+          $("#CATEGORIA option[value='" + contabilidadID["CATEGORIA"] + "']"
+          ).attr("selected", "selected");
+        }, 300);
+
+      });
+    },
+
+    columns: [
+      {
+        title: "Nº",
+        field: "ID",
+        width: 30,
+        headerFilter: "input",
+      },
+
+      {
+        title: "TIPO",
+        field: "TIPO",
+        width: 90,
+        headerFilter: "input",
+      },
+
+      {
+        title: "CATEGORIA",
+        field: "CATEGORIA",
+        width: 120,
+        headerFilter: "input",
+      },
+
+      // {
+      //   title: "PROPIEDAD",
+      //   field: "PROPIEDAD_NOMBRE",
+      //   width: 70,
+      //   headerFilter: "input",
+      // },
+
+      {
+        title: "PROPIETARIO",
+        field: "TERCERO_NOMBRE",
+        width: 130,
+        headerFilter: "input",
+      },
+
+      {
+        title: "DESCRIPCION",
+        field: "DESCRIPCION",
+        width: 120,
+        headerFilter: "input",
+      },
+
+
+      {
+        title: "FECHA",
+        field: "FECHA",
+        width: 80,
+        headerFilter: "input",
+        formatter: "datetime",
+        formatterParams: {
+          outputFormat: "DD/MM/YY",
+          invalidPlaceholder: "(invalid date)",
+        },
+      },
+
+      {
+        title: "VENCIMIENTO",
+        field: "FECHA_VTO",
+        width: 100,
+        headerFilter: "input",
+        formatter: "datetime",
+        formatterParams: {
+          outputFormat: "DD/MM/YY",
+          invalidPlaceholder: "(invalid date)",
+        },
+      },
+
+      {
+        title: "IMPORTE",
+        field: "BI",
+        width: 100,
+        headerFilter: "input",
+        formatter: function (cell) {
+          var valor = cell.getValue();
+          return valor + '€'
+        }
+      },
+
+      {
+        title: "IVA",
+        field: "IVA",
+        width: 60,
+        headerFilter: "input",
+        formatter: function (cell) {
+          var valor = cell.getValue();
+          return valor + '%'
+        }
+            
+      },
+
+      {
+        title: "TOTAL",
+        field: "TOTAL",
+        width: 120,
+        headerFilter: "input",
+        formatter: function (cell) {
+          var valor = cell.getValue();
+          return valor + '€'
+        }
+      },
+
+      {
+        title: "ESTADO",
+        field: "estadoTesoreria",
+        headerFilter: "input",
+      },
+
+
+
+    ],
+
+    rowFormatter: function (row) {
+      if (row.getData().ESTADO == "Cobrado") {
+        row.getElement().classList.add("cobrado");
+      } else if (row.getData().ESTADO == "0") {
+        row.getElement().classList.add("cobrado");
+      }
+    },
+
+  });
+
+
+
+  //ACCIONES
+
+  $("#inputBreadCrump").html(comunidadID.DESCRIPCION);
+
+  $("#botonNuevaContabilidad").click(function () {
+    $("#tituloModal").html("<h5>NUEVA CONTABILIDAD</h5>");
+    $("#tituloModal").show();
+    $("#cuerpoModal").load("FICHAS/fichaContabilidad.html", function () {
+      $(".guardarNuevaComunidad").show();
+      $("input").attr("disabled", false);
+      $("select").attr("disabled", false);
+    });
+    $("#modalDiv").show("fast");
+  });
+
+  // Cargar lista comunidades
+
+  $("#listComLink").click(function () {
+    $(".main").load("LISTAS/listaComunidades.html");
+    $("#subMenu").empty();
+  });
+
+  $("#creaPdf").click(function () {
+    console.log("crearPDF");
+    cuerpo = table.getHtml();
+    cabecera =
+      "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+      "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+    pie = "</body></html>";
+    salidaHtml = cabecera + cuerpo + pie;
+    var x = window.open();
+    x.document.open();
+    x.document.write(salidaHtml);
+    x.print();
+    x.document.close();
+  });
+
+  //CREAR EXCEL
+
+  $("#creaExcel").click(function () {
+    console.log("crearExcel");
+    table.download("xlsx", "partes.xlsx");
+  });
+
+</script>

@@ -1,0 +1,163 @@
+<div class="mainComunidades">
+
+    <!-- <div class="breadCrump" style="display: none">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de comunidades</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump"></span></li>
+            </ol>
+        </nav>
+    </div> -->
+
+    <div class="headComunidadFicha">
+        <p>Categorías</p>
+    </div>
+
+    <div id="listadoCategorias"></div>
+    <br />
+
+    <!-- <div class="botonesDatosComunidad ">
+            <button class="btn botonEditar" id="activar" onclick="editarCategoria()">EDITAR</button>
+
+            <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormComunidad"
+                onclick="modificaComunidad()">GUARDAR</button>
+
+        </div> -->
+
+    <div class="containerNuevaCategoria" style="display: none">
+        <div class="nuevaCategoria d-flex">
+            <label for="" style="margin-right: 5%;">Nueva categoría</label>
+            <input type="text" class="form-control w-2" id="CATEGORIA" name="CATEGORIA" concepto='categoría'>
+            <button class="btn btn-primary " onclick="addCategoria()">GUARDAR</button>
+        </div>
+    </div>
+
+    <div class="guardarNuevaComunidad">
+        <button type="submit" class="btn btn-primary" id="guardarNuevaCategoria">Nueva
+            Categoría</button>
+    </div>
+
+
+
+</div>
+
+
+<script>
+
+    //DESGLOSE PARTES ----------------------------------------------------
+    var table = new Tabulator("#listadoCategorias", {
+        persistence: true,
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php", //ajax URL
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST", //ajax HTTP request type
+        ajaxParams: { listadoCategorias: "ok" },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+        persistence: {
+            sort: true, //persist sort
+        },
+        initialSort: [
+            { column: "CATEGORIAS", dir: "asc" }, //sort by this first
+        ],
+        //ACTUALIZAR LOS DATOS
+        dataChanged:function(data){
+        //data - the updated table data
+        //envio datos al servidor
+        //alert("Holaaa!");
+        datos = data;
+        //alert(JSON.stringify(datos));
+        $.ajax({
+            url: "https://triagestion.voluta.studio/BACK/servidor.php",
+            method: "POST",
+            async: true,
+            data: {
+                cambiaDatosCategoria: "ok",
+                datos: JSON.stringify(datos)
+            },
+            method: "POST",
+            error: function () {
+                alert("No se puede conectar al Servidor");
+            },
+
+            success: function (respuesta) {
+                resString = "";
+                //resString = JSON.parse(respuesta);
+                resString = respuesta;
+                console.log(respuesta);
+                if(respuesta == "ok"){
+                    textoHtml = "<div class='alert alert-success' role='alert'>actualizado el listado</div>";
+                }else{
+                    textoHtml = "<div class='alert alert-danger' role='alert'>Algo ha ocurrido y no se ha guardado: "+respuesta+"</div>";
+                }
+               
+                aviso(textoHtml);
+            }
+        });
+        },
+        rowClick: function (e, row) {
+            var categoriaElegida = row.getData();
+            categoriaID = categoriaElegida;
+            console.log(categoriaElegida);
+            //MODIFICAR USUARIO
+            // $("#subMenu").load("SUBMENUS/menuComunidades.html"),
+            //     $(".main").load("FICHAS/fichaComunidad.html", function () {
+            //         $(".breadCrump").show();
+            //         $(".headComunidadFicha").show();
+            //         $(".botonesDatosComunidad").show();
+            //         $("#accion").val(categoriaElegida);
+            //         $("#aceptarComunidad").hide();
+            //         // comuArray = datosComunidad(categoriaElegida);
+            //         //Rellenar datos de Campos
+            //         $("#ID").val(categoriaElegida["ID"]);
+            //         $("#DESCRIPCION").val(categoriaElegida["DESCRIPCION"]);
+            //         $("#DIRECCION").val(categoriaElegida["DIRECCION"]);
+            //         $("#CP").val(categoriaElegida["CP"]);
+            //         $("#LOCALIDAD").val(categoriaElegida["LOCALIDAD"]);
+            //         $("#REF_CATASTRAL").val(categoriaElegida["REF_CATASTRAL"]);
+            //         $("#CIF").val(categoriaElegida["CIF"]);
+            //         $("#CUOTA option[value=" + categoriaElegida.CUOTA + "]").attr(
+            //             "selected",
+            //             "selected"
+            //         );
+            //         //HABILITAR O DESABILITAR
+            //         if (categoriaElegida["ACTIVO"] == "1") {
+            //             $("#habilitarComunidad").hide();
+            //         } else if (categoriaElegida["ACTIVO"] == "0") {
+            //             $("#habilitarComunidad").show();
+            //         }
+            //     });
+        },
+
+        columns: [
+            {
+                title: "NOMBRE",
+                field: "CATEGORIAS",
+                headerFilter: "input",
+                editor: "input",
+                formatter: "plaintext",
+                validator: "minLength:3",
+                width: '95%'
+            },
+            {
+                title: "Accion",
+                cellClick: function (e, cell) {
+                    linea = cell.getRow();
+                    table.deleteRow(linea);
+                },
+                formatter: function () {
+                    return "<div class='w-100 align-self-center'><span class='fas fa-trash-can'></span></div>";
+                }
+            }
+        ],
+    });
+
+    $('#guardarNuevaCategoria').click(function () {
+        table.addRow({ CATEGORIAS: "" });
+    });
+
+</script>

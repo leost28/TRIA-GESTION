@@ -1,0 +1,223 @@
+<div class="mainPropiedades" id="containerMantenimiento">
+
+    <div class="breadCrump" style="display: none">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de mantenimientos</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump1"></span></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump"></span></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="headComunidadFicha">
+        <p>Datos mantenimiento</p>
+    </div>
+
+    <form id="añadirMantenimientoForm">
+        <div class=" form-group dflex">
+            <!-- <div class="form-group1">
+                <label for="">Referencia</label>
+                <input type="text" class="form-control activarInput requeridoMantenimiento " id="REFERENCIA"
+                    name="REFERENCIA" concepto='referencia' disabled="true">
+            </div> -->
+            <div class="form-group1">
+                <label for="">Comunidad afectada</label>
+                <select class="form-select w-100 activarInput" id="COMUNIDAD_NOMBRE" name="COMUNIDAD_NOMBRE"
+                    disabled="true">
+                </select>
+            </div>
+
+            <div class="form-group1">
+                <label for=""> Propiedad afectada</label>
+                <select class="form-select w-100 activarInput" id="PROPIEDAD_NOMBRE" name="PROPIEDAD_NOMBRE"
+                    disabled="true">
+                </select>
+            </div>
+
+            <div class="form-group1">
+                <label for=""> Proveedor</label>
+                <select class="form-select w-100 activarInput" id="PROVEEDOR_NOMBRE" name="PROVEEDOR_NOMBRE"
+                    disabled="true">
+                </select>
+            </div>
+        </div>
+
+        <div class=" form-group dflex">
+
+            <div class="form-group1">
+                <label for="">Descripción</label>
+                <input type="textarea" class="form-control activarInput requeridoMantenimiento  " id="DESCRIPCION"
+                    name="DESCRIPCION" concepto='descripcion' disabled="true">
+            </div>
+
+            <div class="form-group1">
+                <label for="">Categoria*</label>
+                <select id="CATEGORIA" name="CATEGORIA" class="form-select activarInput requeridoMantenimiento"
+                    concepto="categoria" disabled="true">
+                </select>
+            </div>
+
+            <div class="form-group1">
+                <label for="FECHA">Fecha de inicio</label>
+                <input type="date" id="FECHA_INICIO" name="FECHA_INICIO" class="form-control activarInput " desc="fecha"
+                    disabled="true">
+            </div>
+        </div>
+
+        <div class="form-group1">
+            <input type="text" class="form-control" id="ID" name="ID" disabled="true" hidden>
+        </div>
+
+        <div class=" form-group dflex">
+            <div class="form-group1 ">
+                <label for="FECHA">Fecha de finalización</label>
+                <input type="date" id="FECHA_FINAL" name="FECHA_FINAL" class="form-control activarInput " desc="fecha"
+                    disabled="true">
+
+            </div>
+
+            <div class="form-group1">
+                <label class="">Intervención:</label>
+                <div class="form-check-inline ">
+                    <input type="radio" id="Intervencion_1" name="INTERVENCION" value="1"
+                        class="form-check-input activarInput" checked disabled="true">
+                    <label for="INTERVENCION_1" class="form-check-label">SI</label>
+                </div>
+                <div class="form-check-inline ">
+                    <input type="radio" id="Intervencion_0" name="INTERVENCION" value="0"
+                        class="form-check-input activarInput" disabled="true">
+                    <label for="INTERVENCION_0" class="form-check-label">NO</label>
+                </div>
+            </div>
+
+            <div class="form-group1 recurrente">
+                <label class="">Recurrente:</label>
+                <div class="form-check-inline ">
+                    <input type="radio" id="Recurrente_1" name="RECURRENTE" value="1"
+                        class="form-check-input activarInput" checked disabled="true">
+                    <label for="RECURRENTE_1" class="form-check-label">SI</label>
+                </div>
+                <div class="form-check-inline ">
+                    <input type="radio" id="Recurrente_0" name="RECURRENTE" value="0"
+                        class="form-check-input activarInput" disabled="true">
+                    <label for="RECURRENTE_0" class="form-check-label">NO</label>
+                </div>
+            </div>
+
+            <div class="botonesDatosComunidad dflex " style="display: none">
+
+                <div class="botoneraHabilitar">
+                    <button type="submit" class="btn btn-primary  botonHabilitar"
+                        id="habilitarMantenimiento">HABILITAR</button>
+                    <button type="submit" class="btn btn-primary  botonHabilitar"
+                        id="deshabilitarMantenimiento">DESHABILITAR</button>
+                </div>
+
+                <div class="botonesDatosComunidad">
+                    <button class="btn botonEditar" id="activar" onclick="editarMantenimiento()">EDITAR</button>
+                    <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormMantenimiento"
+                        onclick="modificaMantenimiento()">GUARDAR</button>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+    <div class="guardarNuevaComunidad" style="display:none">
+
+        <button type="submit" class="btn btn-primary" id="guardarNuevoMantenimiento"
+            onclick="addMantenimiento()">GUARDAR</button>
+
+    </div>
+    <br>
+    <div class="alert alert-danger " role="alert" id="divErrores">
+    </div>
+
+    <button class="btn btn-primary" id="abrirLogMantenimiento">Historial de mantenimiento</button>
+
+    <br>
+
+    <div class="" style="padding-bottom: 2%; display:none; " id="moduloLogMantenimiento">
+
+        <div id="listadoLogMantenimiento">
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    //DISPLAY  
+
+    comunidadSelect("#COMUNIDAD_NOMBRE");
+    propiedadSelect("#PROPIEDAD_NOMBRE");
+    proveedorSelect("#PROVEEDOR_NOMBRE");
+
+    $('#inputBreadCrump1').html(comunidadID.DESCRIPCION);
+    $('#inputBreadCrump').html(mantenimientoID.REFERENCIA);
+
+    $("#guardarFormMantenimiento").hide();
+    $("#divErrores").hide();
+
+
+    // Cargar lista comunidades
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaMantenimientoComunidades.html')
+        // $('#subMenu').empty();
+    });
+
+    //ACCIONES 
+
+    //HABILITAR O DESABILITAR
+    $('#habilitarMantenimiento').hide();
+    $('#deshabilitarMantenimiento').hide();
+    if (mantenimientoID['ACTIVO'] == '1') {
+        $('#deshabilitarMantenimiento').show();
+    } else {
+        $('#habilitarMantenimiento').show();
+    };
+
+
+    function editarMantenimiento() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $("#guardarFormMantenimiento").toggle();
+    };
+
+    $('#añadirMantenimientoForm').submit(function (e) {
+        e.preventDefault();
+    });
+
+
+    $('#abrirLogMantenimiento').click(
+        function () {
+            $("#listadoLogMantenimiento").load("LISTAS/listaLogMantenimiento.html");
+            $('#moduloLogMantenimiento').show();
+            // $('.activarInput').attr('disabled', false);
+        }
+    )
+
+    // HABILITAR-DESHABILITAR Mantenimiento
+
+    $('#habilitarMantenimiento').click(
+        function () {
+            cambiaEstadoMantenimiento(mantenimientoID.ID, "habilitar");
+            $('#deshabilitarMantenimiento').show();
+            $('#habilitarMantenimiento').hide();
+        }
+    );
+
+    $('#deshabilitarMantenimiento').click(function () {
+        cambiaEstadoMantenimiento(mantenimientoID.ID, "deshabilitar");
+        $('#habilitarMantenimiento').show();
+        $('#deshabilitarMantenimiento').hide();
+    });
+
+    cargaCategoriasFinanciera(comunidadID.ID, "CATEGORIA")
+</script>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<recibos>
+
+    <recibo>
+
+        <nombre_propietario></nombre_propietario>
+        <importe></importe>
+        <descipcion></descipcion>
+        <numero_cuenta></numero_cuenta>
+        <fecha></fecha>
+
+    </recibo>
+
+</recibos>

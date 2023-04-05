@@ -1,0 +1,220 @@
+<div class="headListaComunidades">
+    <p>Tesorería</p>
+</div>
+
+<div id="listadoTesoreria"></div>
+<br>
+<div class="row">
+    <div class="col">
+        <button type="" class="guardarNuevaComunidad btn btn-primary mt-3" id="nuevoPagoCobro">nuevo
+            abono/cargo</button>
+    </div>
+
+    <div class="col-1 dflex" style="margin-right: 20px; height: 50px;">
+        <button class="btn btn-danger botoneraExport" id="creaPdf"><span class='fas fa-print'></span>
+        </button>
+        <button class="btn btn-success botoneraExport " id="creaExcel"><span class='fas fa-file-excel'></span>
+        </button>
+    </div>
+</div>
+
+
+
+<div class="fichaPagosCobros mt-5">
+
+    <!-- <br>
+    <hr>
+
+    <div class="headComunidadFicha">
+        <p>Nuevo pago/cobro</p>
+    </div>
+
+    <form action="" id="formPagoCobro" class="tesoreria">
+        <div class=" form-group dflex">
+
+            <div class="form-group1">
+                <label for="inputNIF">Banco*</label>
+                <select placeholder="recuperar con un select dinamico" class="form-control activarInput requerido2"
+                    id="BANCO" name="BANCO" disabled="true" concepto="banco">
+                </select>
+            </div>
+
+            <div class="form-group1">
+                <label for=""> Descripción*</label>
+                <input class="form-select activarInput requerido2" id="DESCRIPCION" name="DESCRIPCION" disabled="true"
+                    concepto="descripcion">
+                </input>
+            </div>
+        </div>
+
+        <div class=" form-group dflex">
+
+            <div class="form-group1">
+                <label for="inputNIF">Importe*</label>
+                <input class="form-control  activarInput requerido2" id="IMPORTE" name="IMPORTE" disabled="true"
+                    concepto="importe">
+                </input>
+            </div>
+
+            <div class="form-group1">
+                <label for="FECHA">Fecha*</label>
+                <input type="date" id="FECHA" name="FECHA" class="form-control activarInput requerido2" concepto="fecha"
+                    disabled="true"></input>
+            </div>
+        </div>
+
+        <div class="botonesDatosComunidad dflex" id="botonesCRUDpagos" style="display: none">
+
+            <div class="botonesDatosComunidad ">
+                <button class="btn botonEditar" id="activar" onclick="editarFormulario2()">EDITAR</button>
+                <button type="submit" class="btn btn-primary" id="guardarNuevoPagoCobro"
+                    onclick=modificaTesoreria()>GUARDAR</button>
+            </div>
+        </div>
+
+        <div class="guardarNuevaComunidad" style="margin-bottom:20px" id="guardarNuevoPagoCobro" style="display: none">
+            <button type="submit" class="btn btn-primary" onclick="addTesoreria()">GUARDAR</button>
+        </div>
+
+        <br>
+    </form> -->
+</div>
+
+
+<script>
+
+    //TABULATOR
+    var terceroID = $('#TERCERO_NOMBRE').val();
+    var table = new Tabulator("#listadoTesoreria", {
+        ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+        dataLoaderLoading: "Un momento!",
+        progressiveLoad: "scroll",
+        placeholder: "Un momento, por favor",
+        ajaxConfig: "POST",
+        ajaxParams: {
+            listaTesoreriaComunidad: "ok",
+            terceroID: terceroID
+        },
+        height: "",
+        width: "100%",
+        layout: "fitColumns",
+
+        sort: true,
+        initialSort: [
+            { column: "ID", dir: "asc" },
+        ],
+
+        rowClick: function (e, row) {
+            var tesoreriaElegida = row.getData();
+            tesoreriaID = tesoreriaElegida;
+            alert('ESTAMOS EN TESORERIA COMUNIDADES')
+            $(".fichaPagosCobros").load('FICHAS/fichaTesoreria.html', function () {
+                $('#guardarNuevoPagoCobro').hide();
+                $('#botonesCRUDpagos').show(function () {
+                    $('#modificaPagoCobro').hide()
+                });
+                $('#editarAbonoCargoTitulo').show();
+                $("#accion").val(tesoreriaElegida);
+                // propArray = listaPropiedades(tesoreriaElegida);
+                //Rellenar datos de Campos
+                $("#ID").val(tesoreriaElegida['ID']);
+                $("#FINANCIERA_ID").val(tesoreriaElegida['FINANCIERA_ID']);
+                $("#BANCO").val(tesoreriaElegida['BANCONOMBRE']);
+                $("#TIPO option[value=" + tesoreriaElegida.TIPO + "]").attr(
+                    "selected",
+                    "selected"
+                );
+                $("#TERCERO_ID").val(tesoreriaElegida['TERCERO_ID']);
+                $("#IMPORTE").val(tesoreriaElegida['IMPORTE']);
+                $("#DESCRIPCION").val(tesoreriaElegida['DESCRIPCION']);
+                $("#FECHA").val(tesoreriaElegida['FECHA']);
+            });
+        },
+
+        columns: [
+            {
+                title: "Nº", field: "ID", width: 60, headerFilter: "input",
+            },
+
+            {
+                title: "TERCERO", field: "nombreTercero", headerFilter: "input"
+            },
+
+            {
+                title: "IMPORTE", field: "IMPORTE", headerFilter: "input",
+                formatter: function (cell) {
+                    var valor = cell.getValue();
+                    return valor + '€'
+                }
+            },
+
+            {
+                title: "BANCO", field: "BANCONOMBRE", headerFilter: "input"
+            },
+
+            {
+                title: "TIPO", field: "TIPO", headerFilter: "input"
+            },
+
+            {
+                title: "DESCRIPCION", field: "DESCRIPCION", headerFilter: "input"
+            },
+
+            {
+                title: "FECHA", field: "FECHA", headerFilter: "input", formatter: "datetime", formatterParams: {
+
+                    outputFormat: "DD/MM/YY",
+                    invalidPlaceholder: "(invalid date)",
+                }
+            },
+        ],
+    });
+
+
+    
+
+
+
+
+
+    $("#creaPdf").click(function () {
+        console.log("crearPDF");
+        cuerpo = table.getHtml();
+        cabecera = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+            "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+        pie = "</body></html>";
+        salidaHtml = cabecera + cuerpo + pie;
+        var x = window.open();
+        x.document.open();
+        x.document.write(salidaHtml);
+        x.print()
+        x.document.close();
+    });
+
+    //CREAR EXCEL
+
+    $("#creaExcel").click(function () {
+        console.log("crearExcel");
+        table.download("xlsx", "partes.xlsx")
+    });
+
+
+    $('#nuevoPagoCobro').click(function () {
+
+        $('.fichaPagosCobros').load('FICHAS/fichaTesoreria.html', function () {
+            $('#nuevoAbonoCargoTitulo').show();
+            $('input').attr("disabled", false);
+            $('select').attr("disabled", false);
+            $('#botonesCRUDpagos').hide();
+            $('#guardarNuevoPagoCobro').show();
+        });
+
+    })
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        // alert("envio");
+    });
+
+
+</script>

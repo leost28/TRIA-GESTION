@@ -1,0 +1,200 @@
+<div class="containerComunidades">
+
+  <div class="headListaComunidades">
+    <p>Lista de comunidades</p>
+  </div>
+
+  <div id="listadoComunidad"></div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-primary botonPosition" id="botonNuevaComunidad" data-toggle="modal"
+        data-target="#nuevaComunidad">
+        <span class="fas fa-address-card"></span> Nueva Comunidad
+      </button>
+    </div>
+
+    <div class="col-1 dflex">
+      <button class="btn btn-danger botoneraExport" id="creaPdf">
+        <span class="fas fa-print"></span>
+      </button>
+      <button class="btn btn-success botoneraExport" id="creaExcel">
+        <span class="fas fa-file-excel"></span>
+      </button>
+    </div>
+  </div>
+
+</div>
+<script>
+  //DESGLOSE PARTES ----------------------------------------------------
+  var table = new Tabulator("#listadoComunidad", {
+    persistence: true,
+    ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php", //ajax URL
+    dataLoaderLoading: "Un momento!",
+    progressiveLoad: "scroll",
+    placeholder: "Un momento, por favor",
+    ajaxConfig: "POST", //ajax HTTP request type
+    ajaxParams: { listadoComunidad: "ok" },
+    height: "",
+    width: "100%",
+    layout: "fitColumns",
+    persistence: {
+      sort: true, //persist sort
+    },
+    initialSort: [
+      { column: "ID", dir: "asc" }, //sort by this first
+    ],
+
+    rowClick: function (e, row) {
+      var comunidadElegida = row.getData();
+      comunidadID = comunidadElegida;
+      console.log(comunidadElegida);
+      //MODIFICAR USUARIO
+      $("#subMenu").load("SUBMENUS/menuComunidades.html"),
+        $(".main").load("FICHAS/fichaComunidad.html", function () {
+          $(".breadCrump").show();
+          $(".headComunidadFicha").show();
+          $(".botonesDatosComunidad").show();
+          $("#accion").val(comunidadElegida);
+          $("#aceptarComunidad").hide();
+          // comuArray = datosComunidad(comunidadElegida);
+          //Rellenar datos de Campos
+          $("#ID").val(comunidadElegida["ID"]);
+          $("#DESCRIPCION").val(comunidadElegida["DESCRIPCION"]);
+          $("#DIRECCION").val(comunidadElegida["DIRECCION"]);
+          $("#CP").val(comunidadElegida["CP"]);
+          $("#LOCALIDAD").val(comunidadElegida["LOCALIDAD"]);
+          $("#REF_CATASTRAL").val(comunidadElegida["REF_CATASTRAL"]);
+          $("#CIF").val(comunidadElegida["CIF"]);
+          $("#CUOTA option[value=" + comunidadElegida.CUOTA + "]").attr(
+            "selected",
+            "selected"
+          );
+          //HABILITAR O DESABILITAR
+          if (comunidadElegida["ACTIVO"] == "1") {
+            $("#habilitarComunidad").hide();
+          } else if (comunidadElegida["ACTIVO"] == "0") {
+            $("#habilitarComunidad").show();
+          }
+          //LISTADO DE CATEGORIAS
+          cargaCategorias(comunidadID.ID,"CATEGORIAS");
+        });
+    },
+
+    columns: [
+      {
+        title: "Nº",
+        field: "ID",
+        width: 60,
+        headerFilter: "input",
+      },
+      {
+        title: "DESCRIPCION",
+        field: "DESCRIPCION",
+        headerFilter: "input",
+      },
+      {
+        title: "DIRECCION",
+        field: "DIRECCION",
+        headerFilter: "input",
+      },
+      {
+        title: "LOCALIDAD",
+        field: "LOCALIDAD",
+        headerFilter: "input",
+      },
+      {
+        title: "CP",
+        field: "CP",
+        headerFilter: "input",
+      },
+      {
+        title: "REF. CATASTRAL",
+        field: "REF_CATASTRAL",
+        headerFilter: "input",
+      },
+      {
+        title: "CIF",
+        field: "CIF",
+        headerFilter: "input",
+      },
+      {
+        title: "CUOTA",
+        field: "CUOTA",
+        headerFilter: "input",
+        formatter: function (cell) {
+          var valor = cell.getValue()
+          if (valor == 'Participación') {
+            return '%' + valor;
+          }
+          else if (valor == 'Alicuota') {
+            return valor
+          }
+        }
+      },
+      {
+        title: "ACTIVO",
+        field: "ACTIVO",
+        width: 100,
+        headerFilter: "input",
+        formatter: function (cell) {
+          var valor = cell.getValue();
+          if (valor == 1) {
+            return "<span>activo</span>";
+          } else {
+            return "<span>inactivo</span>";
+          }
+        },
+      },
+    ],
+
+    rowFormatter: function (row) {
+      if (row.getData().ACTIVO == "1") {
+        row.getElement().classList.add("activo");
+      } else if (row.getData().ACTIVO == "0") {
+        row.getElement().classList.add("inactivo");
+      }
+    },
+  });
+
+  //CREAR PDF
+
+  $("#creaPdf").click(function () {
+    console.log("crearPDF");
+    cuerpo = table.getHtml();
+    cabecera =
+      "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+      "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+    pie = "</body></html>";
+    salidaHtml = cabecera + cuerpo + pie;
+    var x = window.open();
+    x.document.open();
+    x.document.write(salidaHtml);
+    x.print();
+    x.document.close();
+  });
+
+  //CREAR EXCEL
+
+  $("#creaExcel").click(function () {
+    console.log("crearExcel");
+    table.download("xlsx", "partes.xlsx");
+  });
+
+  //DISPARADORES
+
+  //Llamar al MODAL nueva comunidad
+
+  $("#botonNuevaComunidad").click(function () {
+    $("#cuerpoModal").load("FICHAS/fichaComunidad.html", function () {
+      $(".guardarNuevaComunidad").show();
+      $("#fichaComunidad").removeClass("mainComunidades");
+      $("input").attr("disabled", false);
+      $("select").attr("disabled", false);
+    });
+    $("#tituloModal").show();
+    $("#tituloModal").html("<h5>NUEVA COMUNIDAD</h5>");
+
+    $("#modalDiv").show("fast");
+  });
+</script>

@@ -1,0 +1,125 @@
+<!-- SUBMENU COMUNIDADES -->
+
+<div class="subMenu1 dflex" id="subMenuComunidades">
+  <div type="button" class="subMenuBox subMenuBox1" type="button" id="datosComunidad">
+    <p>Datos</p>
+  </div>
+
+  <div type="button" class="subMenuBox" id="listaPropiedades">
+    <p>Inmuebles</p>
+  </div>
+
+  <div type="button" class="subMenuBox" id="listaPropietarios">
+    <p>Propietarios</p>
+  </div>
+
+  <div type="button" class="subMenuBox" id="listaRecibos">
+    <p>Recibos</p>
+  </div>
+
+  <div type="button" class="subMenuBox" id="listaContabilidad">
+    <p>Contabilidad</p>
+  </div>
+
+  <div type="button" class="subMenuBox" id="listaMantenimientos">
+    <p>Mantenimiento</p>
+  </div>
+
+  <div class="subMenuBox" type="button" id="listaPresupuestos">
+    <p>Presupuestos</p>
+  </div>
+
+  <div type="button" class="subMenuBox" id="listaBancos">
+    <p>Bancos</p>
+  </div>
+
+  <div type="button" class="subMenuBox subMenuBox2" id="listaDocumentos">
+    <p>Documentos</p>
+  </div>
+</div>
+
+<!-- <div class="desplegable" type="button">
+  <i class="fa-solid fa-arrow-left-long"></i>
+</div> -->
+
+<!-- <div class="abreDesplegable" type="button" style="display: none">
+  <i class="fa-solid fa-arrow-left-long"></i>
+</div> -->
+
+<script>
+  //ACCIONES
+
+  $("#listaPropiedades").click(function () {
+    $(".main").load("LISTAS/listaPropiedades.html");
+  });
+
+  $('#listaPropietarios').click(function () {
+    $('.main').load('LISTAS/listaTerceros.html')
+  });
+
+  $("#listaMantenimientos").click(function () {
+    $(".main").load("LISTAS/listaMantenimientoComunidades.html");
+  });
+
+  $("#listaContabilidad").click(function () {
+    $(".main").load("LISTAS/listaContabilidadComunidades.html");
+  });
+
+  $("#listaRecibos").click(function () {
+    $(".main").load("LISTAS/listaRecibosComunidades.html");
+  });
+
+  $('#listaPresupuestos').click(function () {
+    $('.main').load('LISTAS/listaPresupuestos.html');
+    $(".breadCrump").show();
+    $('#subMenu').empty();
+
+  });
+
+
+  $("#listaBancos").click(function () {
+    $(".main").load("LISTAS/listaBancosComunidades.html");
+  });
+
+  $("#listaFacturas").click(function () {
+    $(".main").load("LISTAS/listaTesoreriaComunidades.html");
+  });
+
+  $("#datosComunidad").click(function () {
+    $(".main").load("FICHAS/fichaComunidad.html", function () {
+      $(".breadCrump").show();
+      $(".headComunidadFicha").show();
+      $(".botonesDatosComunidad").show();
+      cargaCategorias(comunidadID.ID,"CATEGORIAS");
+    });
+  });
+
+  $("#listaDocumentos").click(function () {
+    $(".main").load("LISTAS/listaDocumentos.html", function () {
+      $("#containerDocumentos").addClass("mainPropiedades");
+      $(".breadCrump").show();
+    });
+    // $('.subMenu').empty();
+  });
+
+  // function mostrar() {
+  //     document.getElementById("sidebar").style.width = "300px";
+  //     document.getElementById("contenido").style.marginLeft = "300px";
+  //     document.getElementById("abrir").style.display = "none";
+  //     document.getElementById("cerrar").style.display = "inline";
+  // }
+
+  $(".desplegable").click(function () {
+    $(".subMenu1").addClass("cerrarSubMenu");
+    $(".desplegable").addClass("cerrarBotonDesplegable");
+
+    // $(".abreDesplegable").show("");
+
+    // $("#fichaComunidad").removeClass("mainComunidades");
+    // $("#fichaComunidad").addClass("cerrarSubMenu");
+
+    // $(".main").style.marginLeft = "0";
+    // document.getElementById("abrir").style.display = "inline";
+    // document.getElementById("cerrar").style.display = "none";
+  });
+</script>

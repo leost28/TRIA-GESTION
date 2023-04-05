@@ -1,0 +1,173 @@
+<div class="headComunidadFicha" style="display: none">
+    <p>Datos contabilidad</p>
+</div>
+
+<form id="contabilidadForm">
+
+    <div class=" form-group dflex">
+
+        <div class="form-group1">
+            <label for="">Categoria*</label>
+            <select id="CATEGORIA" name="CATEGORIA" class="form-select activarInput requerido" concepto="categoria"
+                disabled="true">
+            </select>
+
+        </div>
+
+        <div class="form-group1">
+            <label for="FECHA">Fecha</label>
+            <input type="date" id="FECHA" name="FECHA" class="form-control activarInput requerido" desc="fecha"
+                disabled="true" concepto="fecha">
+        </div>
+
+        <div class="form-group1">
+            <label for="FECHA_VENCIMIENTO">Fecha de vencimiento</label>
+            <input type="date" id="FECHA_VTO" name="FECHA_VTO" class="form-control activarInput requerido"
+                desc="fecha de vencimiento" disabled="true" concepto="fecha de vencimiento">
+        </div>
+
+    </div>
+
+
+    <div class=" form-group dflex">
+
+        <div class="form-group1">
+            <label for="inputNIF">Descripción*</label>
+            <input type="input" class="form-control activarInput requerido" id="DESCRIPCION" name="DESCRIPCION"
+                concepto=' descripcion' disabled="true">
+        </div>
+
+        <div class="form-group1">
+            <label for=""> Propiedad</label>
+            <select class="form-select w-100 activarInput" id="PROPIEDAD_NOMBRE" name="PROPIEDAD_NOMBRE"
+                disabled="true">
+            </select>
+        </div>
+
+        <div class="form-group1">
+            <label for=""> Tercero*</label>
+            <select class="form-select w-100 activarInput " id="TERCERO_NOMBRE" name="TERCERO_NOMBRE" concepto="tercero"
+                disabled="true">
+            </select>
+        </div>
+    </div>
+
+    <div class=" form-group dflex">
+
+        <div class="form-group1">
+            <label for="inputTipoContabilidad">Tipo*</label>
+            <select name="TIPO" id="TIPO" class="form-select activarInput requerido" disabled="true">
+                <option selected value="cargo">cargo</option>
+                <option value="abono">abono</option>
+            </select>
+        </div>
+
+        <div class="form-group1">
+            <label for="inputTelefonoContabilidad">Importe*</label>
+            <input type="text" class="form-control activarInput requerido" id="BI" name="BI" concepto='importe'
+                disabled="true">
+        </div>
+
+        <div class="form-group1">
+            <label for="inputEmail">IVA</label>
+            <input type="text" class="form-control activarInput" id="IVA" name="IVA" concepto='IVA' disabled="true">
+        </div>
+
+    </div>
+
+    <div class="form-group1">
+        <input type="text" class="form-control" id="ID" name="ID" hidden>
+    </div>
+
+
+    <div class="alert alert-danger " role="alert" id="divErrores" style="display: none"></div>
+
+
+</form>
+
+
+<div class="botonesDatosComunidad dflex " style="display: none">
+
+    <div class="botonesDatosComunidad ">
+        <button class="btn botonEditar" id="activar" onclick="editarFormulario()">EDITAR</button>
+        <button type="submit" class="btn btn-primary" id="guardarNuevaContabilidad"
+            onclick=modificaContabilidad()>GUARDAR</button>
+    </div>
+
+</div>
+
+<div class="guardarNuevaComunidad" style="display: none">
+    <button type="submit" class="btn btn-primary" id="guardarNuevaPropiedad"
+        onclick="addContabilidad()">GUARDAR</button>
+</div>
+
+<div class="campoRequerido">
+    *campo requerido
+</div>
+
+
+<br>
+<hr>
+<br>
+
+
+<button class="btn btn-primary mb-3" id="abrirPagosCobros">Visualizar tesorería</button>
+
+<br>
+
+<div class="tesoreria" id="moduloTesoreria" style="display:none">
+
+    <div id="listadoPagosCobros"></div>
+
+</div>
+
+
+
+<script>
+
+    // DISPLAY
+
+    $('#guardarNuevaContabilidad').hide();
+    tercerosSelectProp("#TERCERO_NOMBRE", propiedadID.ID, 0);
+    propiedadSelect("#PROPIEDAD_NOMBRE");
+
+    //ACCIONES
+
+    function editarFormulario() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $('#guardarNuevaContabilidad').toggle();
+    }
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        alert("envio");
+    });
+
+    $('#PROPIEDAD_NOMBRE').change(function () {
+        propiedadID.ID = $('#PROPIEDAD_NOMBRE').val();
+        tercerosSelectProp("#TERCERO_NOMBRE", propiedadID.ID, 0);
+    }
+    );
+
+    $('#abrirPagosCobros').click(
+        function () {
+            $("#listadoPagosCobros").load("LISTAS/listaTesoreriaComunidades.html");
+            $('#moduloTesoreria').show();
+            // $('.activarInput').attr('disabled', false);
+        }
+    )
+
+    // $('#nuevoPagoCobro').click(function(){
+    //     $('.fichaPagosCobros').show();
+    //     $('#botonesCRUDpagos').hide();
+    //     $('#guardarNuevoPagoCobro').show();
+    // })
+
+    //TABULATOR TESORERIA 
+    //CATEGORIAS
+    cargaCategoriasFinanciera(comunidadID.ID, "CATEGORIA")
+
+
+
+</script>

@@ -1,0 +1,124 @@
+<div class="headComunidadFicha" style="display: none">
+    <p>Datos del inmueble</p>
+</div>
+
+<form id="añadirPropiedadForm">
+
+    <div class=" form-group dflex">
+
+        <div class="form-group1">
+            <label for=""> Propietario*</label>
+            <select class="form-select w-100 activarInputPropiedad requerido" id="TERCERO_NOMBRE" name="TERCERO_NOMBRE"
+                concepto="propietario" disabled="true">
+            </select>
+        </div>
+
+        <div class="form-group1">
+            <label for="inputDescripcion">Dirección*</label>
+            <input type="text" class="form-control activarInputPropiedad requerido" id="DIRECCION" name="DIRECCION"
+                concepto='dirección' disabled=" true">
+        </div>
+
+        <!-- <div class="form-group1">
+            <label for="inputM2">Metros cuadrados*</label>
+            <input type="text" class="form-control activarInputPropiedad requerido" id="M2" name="M2"
+                concepto='metros cuadrados' disabled=" true">
+        </div> -->
+
+
+    </div>
+
+    <div class=" form-group dflex">
+
+        <div class="form-group1 ">
+            <label for="inputState">Tipo de cuota*</label>
+            <input type="text" id="TIPOCUOTA" name="TIPOCUOTA" class="form-control activarInputPropiedad requerido"
+                concepto="tipo de cuota" disabled=" true">
+            </input>
+        </div>
+
+        <div class="form-group1 ">
+            <label for="inputState">Coeficiente de participación*</label>
+            <input type="text" placeholder="Indique solo si la cuota es % participación" id="COEF" name="COEF"
+                class="form-control activarInputPropiedad" concepto="coeficiente de participación" disabled=" true">
+            </input>
+        </div>
+
+    </div>
+    <div class="form-group1">
+        <input type="text" class="form-control" id="IDpropiedad" name="ID" hidden>
+    </div>
+
+
+    <br>
+    <div class="alert alert-danger " role="alert" id="divErrores" style="display: none">
+    </div>
+
+    <br>
+
+    <div class="campoRequerido">
+        *campo requerido
+    </div>
+
+</form>
+
+<div class="botonesDatosComunidad dflex" style="display: none">
+
+    <div class="botonesDatosComunidad ">
+
+        <button type="submit" class="btn btn-primary" id="eliminarPropiedad">ELIMINAR</button>
+        <button class="btn btn-danger mod" id="supPropiedad" onclick="eliminarPropiedad()"
+            style="display: none"><strong>Si,
+                eliminar
+                inmueble</strong></button>
+
+        <button class="btn botonEditar" id="activar" onclick="editarPropiedad()">EDITAR</button>
+
+        <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormPropiedad"
+            onclick="modificaPropiedad()">GUARDAR</button>
+    </div>
+
+</div>
+
+<div class="botonesNuevaPropiedad" style="display: none">
+    <button type="submit" class="btn btn-primary" id="guardarNuevaPropiedad" onclick=addPropiedad()>GUARDAR</button>
+</div>
+
+
+<script>
+
+    //VARIABLES
+
+    //DISPLAY
+
+    $("#guardarFormPropiedad").hide();
+    $("#divErrores").hide();
+    tercerosSelect("#TERCERO_NOMBRE");
+
+    //ACCIONES
+
+    function editarPropiedad() {
+        $('.activarInputPropiedad').attr('disabled', false);
+        $("#guardarFormPropiedad").toggle();
+        $('.botonEditar').hide();
+    }
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        alert("envio");
+    });
+
+
+    // ELIMINAR PROPIEDAD
+
+    $('#eliminarPropiedad').click(function () {
+        $('#supPropiedad').toggle();
+        $('#eliminarPropiedad').hide();
+    });
+
+    //DISPLAY
+
+    $("#supPropiedad").hide();
+
+
+</script>

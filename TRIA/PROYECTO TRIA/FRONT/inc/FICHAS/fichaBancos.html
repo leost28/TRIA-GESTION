@@ -1,0 +1,109 @@
+<div class="headComunidadFicha" style="display: none">
+    <p>Datos del banco</p>
+</div>
+
+<form id="bancosForm">
+
+    <div class=" form-group dflex">
+
+        <div class="form-group1">
+            <label for="nombreBanco">Nombre</label>
+            <input type="text" id="NOMBRE" name="NOMBRE" class="form-control activarInput requerido" disabled="true"
+                concepto="nombre del banco">
+        </div>
+
+
+        <div class="form-group1">
+            <label for="Tipo">Tipo*</label>
+            <select id="TIPO" name="TIPO" class="form-select activarInput requerido" concepto="tipo" disabled="true">
+                <option value="cuenta">Cuenta bancaria corriente</option>
+                <option value="efectivo">cuenta caja/efectivo</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class=" form-group dflex">
+
+        <div class="form-group1">
+            <label for="numeroCuenta">Numero de cuenta</label>
+            <input type="text" id="NUMERO_CUENTA" name="NUMERO_CUENTA" class="form-control activarInput" desc="fecha"
+                disabled="true" concepto="numero de cuenta">
+        </div>
+
+        <div class="form-group1">
+            <label for="BIC">BIC</label>
+            <input type="text" id="BIC" name="BIC" class="form-control activarInput" disabled="true" concepto="BIC">
+        </div>
+    </div>
+
+    <div class="form-group1">
+        <input type="text" class="form-control" id="ID" name="ID" hidden>
+    </div>
+
+    <br>
+    <div class="alert alert-danger " role="alert" id="divErrores" style="display: none"></div>
+    <br>
+
+
+
+</form>
+
+
+<div class="botonesDatosComunidad dflex " id="botonesBanco" style="display: none">
+
+    <button type="submit" class="btn btn-primary" id="eliminarBanco">ELIMINAR</button>
+    <button class="btn btn-danger mod" id="supBanco" onclick="eliminarBanco()" style="display: none"><strong>Si,
+            eliminar
+            banco</strong></button>
+
+    <div class="botonesDatosComunidad">
+        <button class="btn botonEditar" id="activar" onclick="editarFormulario()">EDITAR</button>
+        <button type="submit" class="btn btn-primary" id="modificaBanco" onclick="modificaBanco()">GUARDAR</button>
+    </div>
+</div>
+
+<div class="guardarNuevaComunidad" style="display: none">
+    <button type="submit" class="btn btn-primary" id="guardarNuevoBanco" onclick="addBanco()">GUARDAR</button>
+</div>
+
+<div class="campoRequerido">
+    *campo requerido
+</div>
+
+<script>
+
+    // DISPLAY
+
+    // ELIMINAR BANCO
+    $('#eliminarBanco').click(function () {
+        $('#supBanco').toggle();
+        $('#eliminarBanco').hide();
+    });
+
+
+    //DISPLAY
+
+    $("#supBanco").hide();
+
+
+
+    //ACCIONES
+
+    function editarFormulario() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $('#modificaBanco').toggle();
+    }
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        alert("envio");
+    });
+
+
+
+
+
+
+</script>

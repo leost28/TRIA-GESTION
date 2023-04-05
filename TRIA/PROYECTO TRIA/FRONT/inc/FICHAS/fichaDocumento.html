@@ -1,0 +1,113 @@
+<div class="headComunidadFicha" style="display: none">
+    <p>Datos del documento</p>
+</div>
+
+<form id="añadirDocumentoForm">
+
+    <div class=" form-group dflex">
+        <div class="form-group1">
+            <label for="inputNombreDocumento">Nombre*</label>
+            <input type="text" class="form-control activarInput requerido" id="NOMBRE" name="NOMBRE" concepto='nombre'
+                disabled=" true">
+
+        </div>
+
+        <div class="form-group1">
+            <label for="inputPermiso">Permiso*</label>
+            <input type="text" class="form-control activarInput requerido" id="PERMISO" name="PERMISO"
+                concepto='permiso' disabled=" true">
+
+        </div>
+
+        <div class="form-group1">
+            <label for="inputDocumento">Documento</label>
+            <input type="file" class="form-control activarInput requerido" id="agregarDocumento"
+                name="agregarDocumento">
+        </div>
+
+    </div>
+    <div class=" form-group dflex">
+
+        <div class="form-group1">
+            <input type="text" class="form-control" id="ID" name="ID" hidden>
+        </div>
+
+        <div class="form-group1">
+            <label for=""></label>
+            <input type="text" class="form-control activarInput requerido" id="FK_ID" name="FK_ID" hidden>
+        </div>
+
+        <div class="form-group1">
+            <label for=""></label>
+            <input type="text" class="form-control activarInput requerido" id="FK_TABLA" name="FK_TABLA" hidden>
+        </div>
+
+    </div>
+
+</form>
+
+<div class="botonesDatosComunidad dflex" style="display: none">
+    <div class="botonesDatosDocumento">
+
+        <button type="submit" class="btn btn-primary" id="eliminarDocumento">ELIMINAR</button>
+        <button class="btn btn-danger mod" id="supDocumento" onclick="eliminarDocumento()"
+            style="display: none"><strong>Si,
+                eliminar
+                documento</strong></button>
+
+        <button class="btn botonEditar" id="activar" onclick="editarDocumento()">EDITAR</button>
+
+        <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormDocumento"
+            onclick="modificaDocumento()">GUARDAR</button>
+    </div>
+</div>
+
+<div class="guardarNuevaComunidad  dflex" style="display: none">
+
+    <button type="submit" class="btn btn-primary botonGuardar" id="guardarForm"
+        onclick="addDocumento()">GUARDAR</button>
+
+</div>
+
+
+<!-- <div class="mainPropiedades">
+    <div class=" form-group dflex">
+        <div class="form-group1">
+            <label for="inputUsuario">Usuario</label>
+            <input type="text" class="form-control activarInput requerido" id="USUARIO" name="USUARIO"
+                concepto='usuario' disabled=" true">
+
+        </div>
+
+        <div class="form-group1">
+            <label for="inputContraseña">Contraseña</label>
+            <input type="text" class="form-control activarInput requerido" id="PASS" name="PASS"
+                concepto='contraseña' disabled=" true">
+        </div>
+    </div>
+</div> -->
+
+<script>
+
+    //ACCIONES
+
+    $('#guardarFormDocumento').hide();
+
+    function editarDocumento() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $("#guardarFormDocumento").toggle();
+    }
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        alert("envio");
+    });
+
+     // ELIMINAR DOCUMENTO
+     $('#eliminarDocumento').click(function () {
+        $('#supDocumento').toggle();
+        $('#eliminarDocumento').hide();
+    });
+
+</script>

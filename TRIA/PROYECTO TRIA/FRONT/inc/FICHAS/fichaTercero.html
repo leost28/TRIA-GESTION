@@ -1,0 +1,201 @@
+<div class="" id="fichaTercero">
+    <div class="breadCrumb" style="display: none">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li type="button" class="breadcrumb-item" id="listComLink"><a>Lista de terceros</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span id="inputBreadCrump"></span></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="headComunidadFicha" style="display: none">
+        <p>Datos terceros</p>
+    </div>
+
+    <form id="añadirTerceroForm">
+
+        <div class=" form-group dflex campoFormTercero">
+            <div class="form-group1 ">
+                <label for="inputNombreTercero">Nombre*</label>
+                <input type="text" class="form-control activarInput requeridoTercero" id="NOMBRE" name="NOMBRE"
+                    concepto='nombre' disabled="true">
+
+            </div>
+
+            <div class="form-group1">
+                <label for="inputApellido1">Primer Apellido*</label>
+                <input type="text" class="form-control activarInput requeridoTercero" id="APELLIDO1" name="APELLIDO1"
+                    concepto='primer apellido' disabled="true">
+
+            </div>
+
+
+            <div class="form-group1">
+                <label for="inputApellido2">Segundo Apellido</label>
+                <input type="text" class="form-control activarInput" id="APELLIDO2" name="APELLIDO2"
+                    concepto='segundo apellido' disabled="true">
+
+            </div>
+
+        </div>
+
+        <div class=" form-group dflex campoFormTercero">
+
+
+            <div class="form-group1">
+                <label for="inputNIF">NIF*</label>
+                <input type="text" class="form-control activarInput requeridoTercero" id="NIF" name="NIF" concepto='NIF'
+                    disabled="true">
+
+            </div>
+
+            <div class="form-group1">
+                <label for="inputDireccion">Dirección*</label>
+                <input type="text" class="form-control activarInput requeridoTercero" id="DIRECCION" name="DIRECCION"
+                    concepto='direccion' disabled="true">
+            </div>
+
+            <div class="form-group1">
+                <label for="inputCP">Código postal*</label>
+                <input type="text" class="form-control activarInput requeridoTercero" id="CP" name="CP"
+                    concepto='código postal' disabled="true">
+            </div>
+
+
+
+        </div>
+
+        <div class=" form-group dflex campoFormTercero">
+            <div class="form-group1">
+                <label for="inputLocalidadTercero">Localidad*</label>
+                <input type="text" class="form-control activarInput requeridoTercero" id="LOCALIDAD" name="LOCALIDAD"
+                    concepto='localidad' disabled="true">
+
+            </div>
+
+            <div class="form-group1">
+                <label for="inputTelefonoTercero">Teléfono*</label>
+                <input type="text" class="form-control activarInput requeridoTercero" id="TELEFONO" name="TELEFONO"
+                    concepto='teléfono' disabled="true">
+
+            </div>
+
+
+            <div class="form-group1">
+                <label for="inputEmail">Email*</label>
+                <input type="text" class="form-control activarInput requeridoTercero" id="EMAIL" name="EMAIL"
+                    concepto='email' disabled="true">
+
+            </div>
+        </div>
+
+        <div class=" form-group dflex campoFormTercero">
+
+            <div class="form-group1">
+                <label for="inputContraseña">Nº de cuenta</label>
+                <input type="text" class="form-control activarInput" id="CCC" name="CCC" concepto='numero de cuenta'
+                    disabled="true">
+            </div>
+
+            <div class="form-group1">
+                <label for="inputContraseña">Contraseña</label>
+                <input type="text" class="form-control activarInput" id="PASS" name="PASS" concepto='contraseña'
+                    disabled="true">
+            </div>
+        </div>
+
+        <div class=" form-group dflex botonesDatosComunidad campoFormTercero" style="display: none">
+            <div class="dflex">
+                <div class="botoneraHabilitar">
+                    <button type="submit" class="btn btn-primary  botonHabilitar"
+                        id="habilitarTercero">HABILITAR</button>
+
+                    <button type="submit" class="btn btn-primary  botonHabilitar"
+                        id="deshabilitarTercero">DESHABILITAR</button>
+                </div>
+
+                <div>
+                    <button class="btn botonEditar" id="activar" onclick="editarTercero()">EDITAR</button>
+
+                    <button type="submit" class="btn btn-primary  botonGuardar" id="guardarFormTercero"
+                        onclick="modificaTercero()">GUARDAR</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="guardarNuevaComunidad" style="display:none">
+            <button type="submit" class="btn btn-primary" id="guardarNuevaPropiedad"
+                onclick=addTercero()>GUARDAR</button>
+        </div>
+
+        <div class="form-group1">
+            <input type="text" class="form-control" id="ID" name="ID" hidden>
+        </div>
+    </form>
+
+    <br>
+    <div class="alert alert-danger " role="alert" id="divErrores">
+
+    </div>
+
+    <br>
+
+    <div class="camporequeridoTercero">
+        (*)campo requerido
+    </div>
+
+
+</div>
+
+<script>
+
+    //DISPLAY
+
+    $('#inputBreadCrump').html(terceroID.NOMBRE + ' ' + terceroID.APELLIDO1);
+
+    $("#guardarFormTercero").hide();
+    $("#divErrores").hide();
+
+    // Cargar lista comunidades
+
+    $('#listComLink').click(function () {
+        $('.main').load('LISTAS/listaTerceros.html')
+        $('#subMenu').empty();
+    });
+
+    //ACCIONES
+
+    function editarTercero() {
+        $('.activarInput').attr('disabled', false);
+        $('.botonEditar').hide();
+        $("#guardarFormTercero").toggle();
+    }
+
+    $('form').submit(function (e) {
+        e.preventDefault();
+        // alert("envio");
+    });
+
+    // HABILITAR-DESHABILITAR TERCERO
+
+    $('#habilitarTercero').click(
+        function () {
+            cambiaEstadoTercero(terceroID.ID, "habilitar");
+            $('#deshabilitarTercero').show();
+            $('#habilitarTercero').hide();
+            $('.main').load('LISTAS/listaTerceros.html')
+        }
+    );
+
+    $('#deshabilitarTercero').click(
+        function () {
+            cambiaEstadoTercero(terceroID.ID, "deshabilitar");
+            $('#habilitarTercero').show();
+            $('#deshabilitarTercero').hide();
+            $('.main').load('LISTAS/listaTerceros.html')
+        });
+
+</script>

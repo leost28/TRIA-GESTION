@@ -1,0 +1,226 @@
+<div class="containerComunidades mainPropiedades">
+  <div class="headListaComunidades">
+    <p>Contabilidad</p>
+  </div>
+
+  <div id="listadoContabilidad"></div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <button
+        class="btn btn-primary botonPosition"
+        id="botonNuevaContabilidad"
+        data-toggle="modal"
+        data-target="#nuevaContabilidad"
+      >
+        <span class="fas fa-address-card"></span> Nuevo apunte
+      </button>
+    </div>
+
+    <div class="col-1 dflex botonesPropiedades">
+      <button class="btn btn-danger botoneraExport" id="creaPdf">
+        <span class="fas fa-print"></span>
+      </button>
+      <button class="btn btn-success botoneraExport" id="creaExcel">
+        <span class="fas fa-file-excel"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  //TABULATOR
+
+  var table = new Tabulator("#listadoContabilidad", {
+    ajaxURL: "https://triagestion.voluta.studio/BACK/servidor.php",
+    dataLoaderLoading: "Un momento!",
+    progressiveLoad: "scroll",
+    placeholder: "Un momento, por favor",
+    ajaxConfig: "POST",
+    ajaxParams: {
+      listaContabilidad: "ok",
+    },
+    height: "",
+    width: "100%",
+    layout: "fitColumns",
+
+    sort: true,
+    initialSort: [{ column: "ID", dir: "asc" }],
+
+    rowClick: function (e, row) {
+      var contabilidadElegida = row.getData();
+      contabilidadID = contabilidadElegida;
+      console.log(contabilidadElegida);
+
+      // $("#subMenu").load('menuContabilidad.html'),
+      $("#cuerpoModal").load("FICHAS/fichaContabilidad.html", function () {
+        $(".headComunidadFicha").show();
+        $(".botonesDatosComunidad").show();
+        $("#modalDiv").show();
+        $("#accion").val(contabilidadElegida);
+        //Rellenar datos de Campos
+        $("#ID").val(contabilidadElegida["ID"]);
+        $("#COMUNIDAD_ID").val(contabilidadElegida["COMUNIDAD_ID"]);
+        $("#PROPIEDAD_ID").val(contabilidadElegida["PROPIEDAD_ID"]);
+        $("#TERCERO_ID").val(contabilidadElegida["TERCERO_ID"]);
+        $("#FECHA").val(contabilidadElegida["FECHA"]);
+        $("#FECHA_VTO").val(contabilidadElegida["FECHA_VTO"]);
+        $("#CATEGORIA").val(contabilidadElegida["CATEGORIA"]);
+        $("#BI").val(contabilidadElegida["BI"]);
+        $("#IVA").val(contabilidadElegida["IVA"]);
+        $("#DESCRIPCION").val(contabilidadElegida["DESCRIPCION"]);
+        $("#TIPO").val(contabilidadElegida["TIPO"]);
+        $("#ESTADO").val(contabilidadElegida["ESTADO"]);
+        //HABILITAR O DESABILITAR
+        if (contabilidadElegida["ACTIVO"] == "1") {
+          $("#habilitarContabilidad  ").hide();
+          $("#inhabilitarContabilidad  ").show();
+        } else if (contabilidadElegida["ACTIVO"] == "0") {
+          $("#inhabilitarContabilidad  ").hide();
+          $("#habilitarContabilidad  ").show();
+        }
+      });
+    },
+
+    columns: [
+      {
+        title: "Nº",
+        field: "ID",
+        width: 60,
+        headerFilter: "input",
+      },
+
+      {
+        title: "CATEGORIA",
+        field: "CATEGORIA",
+        width: 130,
+        headerFilter: "input",
+      },
+
+      {
+        title: "FECHA",
+        field: "FECHA",
+        width: 100,
+        headerFilter: "input",
+        formatter: "datetime", 
+        formatterParams: {
+            outputFormat: "DD/MM/YY",
+            invalidPlaceholder: "(invalid date)",
+                }
+      },
+
+      {
+        title: "FECHA_VTO",
+        field: "FECHA_VTO",
+        width: 130,
+        headerFilter: "input",
+        formatter: "datetime", 
+        formatterParams: {
+            outputFormat: "DD/MM/YY",
+            invalidPlaceholder: "(invalid date)",
+                }
+      },
+
+      {
+        title: "DESCRIPCION",
+        field: "DESCRIPCION",
+        width: 130,
+        headerFilter: "input",
+      },
+
+      {
+        title: "COMUNIDAD",
+        field: "COMUNIDAD_NOMBRE",
+        width: 130,
+        headerFilter: "input",
+      },
+
+      {
+        title: "PROPIEDAD",
+        field: "PROPIEDAD_NOMBRE",
+        width: 120,
+        headerFilter: "input",
+      },
+
+      {
+        title: "PROPIETARIO",
+        field: "TERCERO_NOMBRE",
+        width: 150,
+        headerFilter: "input",
+      },
+
+      {
+        title: "TIPO",
+        field: "TIPO",
+        width: 80,
+        headerFilter: "input",
+      },
+
+      {
+        title: "IMPORTE",
+        field: "BI",
+        width: 100,
+        headerFilter: "input",
+      },
+
+      {
+        title: "IVA",
+        field: "IVA",
+        width: 80,
+        headerFilter: "input",
+      },
+
+      {
+        title: "TOTAL",
+        field: "TOTAL",
+        width: 80,
+        headerFilter: "input",
+      },
+
+      {
+        title: "ESTADO",
+        field: "ESTADO",
+        headerFilter: "input",
+      },
+    ],
+
+    rowFormatter: function (row) {
+      if (row.getData().ACTIVO == "1") {
+        row.getElement().classList.add("activo");
+      } else if (row.getData().ACTIVO == "0") {
+        row.getElement().classList.add("inactivo");
+      }
+    },
+  });
+
+  //LLAMAR AL MODAL NUEVA CONTABILIDAD
+
+  $("#botonNuevaContabilidad").click(function () {
+    $("#tituloModal").html("<h5>NUEVA Contabilidad</h5>");
+    $("#cuerpoModal").load("FICHAS/fichaContabilidad.html", function () {});
+
+    $("#modalDiv").show("fast");
+  });
+
+  $("#creaPdf").click(function () {
+    console.log("crearPDF");
+    cuerpo = table.getHtml();
+    cabecera =
+      "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Listado</title>" +
+      "</head><style>.tabulator-print-table{width: 100%;border-style: solid;}.tabulator-print-table-row{border-style: solid;text-align: center;}</style><body>";
+    pie = "</body></html>";
+    salidaHtml = cabecera + cuerpo + pie;
+    var x = window.open();
+    x.document.open();
+    x.document.write(salidaHtml);
+    x.print();
+    x.document.close();
+  });
+
+  //CREAR EXCEL
+
+  $("#creaExcel").click(function () {
+    console.log("crearExcel");
+    table.download("xlsx", "partes.xlsx");
+  });
+</script>
